@@ -1,16 +1,16 @@
 ---
 layout: default
-title: "Step 5: 검색 도구"
+title: "Step 5: 검색 Skill"
 nav_order: 7
 ---
 
-# Step 5: 코드 검색 도구
+# Step 5: Grep 도구 사용하기
 {: .no_toc }
 
-⏱️ 15분
+⏱️ 10분
 {: .label .label-purple }
 
-실전 예제: 프로젝트에서 코드 패턴을 찾고 한글을 처리합니다.
+Claude Code의 내장 Grep 도구를 사용해서 코드를 검색하는 skill을 만듭니다.
 {: .fs-6 .fw-300 }
 
 ## 목차
@@ -23,527 +23,171 @@ nav_order: 7
 
 ## 🎯 목표
 
-**만들 것:** 프로젝트 코드에서 패턴을 검색하는 skill
+**핵심 개념:** Claude Code의 도구를 Skill에서 활용
 
-**기능:**
-- 키워드 검색
-- 정규식 지원
-- 한글 처리
-- 파일 타입 필터
+**만들 것:** 키워드 검색 skill
+
+**배울 것:**
+- Grep 도구란 무엇인가
+- Skill에서 도구 사용 지침 작성
 
 ---
 
-## 📝 기본 검색 Skill
+## 🔍 Claude Code의 도구 이해하기
 
-````bash
-cat > ~/.claude/plugins/my-first-plugin/skills/search.md << 'EOF'
+Claude Code는 내장 도구들을 제공합니다:
+- **Read**: 파일 읽기
+- **Write**: 파일 쓰기
+- **Edit**: 파일 수정
+- **Grep**: 코드 검색
+- **Bash**: 명령어 실행
+
+Skill에서 이 도구들을 사용하도록 지침을 작성할 수 있습니다.
+
 ---
-name: search
-description: 코드에서 패턴 검색
-aliases: [find, grep]
+
+## 📝 1단계: 기본 검색 Skill
+
+### Grep 도구란?
+
+Grep은 프로젝트 전체에서 키워드를 찾는 도구입니다.
+
+예시:
+- "TODO"를 포함한 모든 줄 찾기
+- "function" 키워드 검색
+- 특정 변수명 찾기
+
+### Skill 생성
+
+```bash
+mkdir -p ~/.claude/plugins/my-first-plugin/skills/search
+cat > ~/.claude/plugins/my-first-plugin/skills/search/SKILL.md << 'SKILLEOF'
+---
+description: 프로젝트에서 키워드를 검색합니다
+disable-model-invocation: true
+argument-hint: [keyword]
 ---
 
 # Code Search
 
-프로젝트에서 코드 패턴을 검색합니다.
+프로젝트에서 키워드를 검색하세요.
 
-## 사용법
+## 1. 키워드 확인
+사용자가 제공한 키워드를 확인하세요.
 
+## 2. 검색 실행
+Grep 도구를 사용해서 검색하세요.
+
+## 3. 결과 정리
+파일 경로와 일치하는 줄을 보기 좋게 보여주세요.
+SKILLEOF
 ```
-/search [검색어]
-```
 
-## 실행
+### 테스트
 
 ```bash
-# ripgrep 사용 (빠름)
-if command -v rg > /dev/null; then
-  rg "[검색어]" --type js --type ts
-else
-  # grep 폴백
-  grep -r "[검색어]" . \
-    --include="*.js" \
-    --include="*.ts" \
-    --exclude-dir=node_modules \
-    --exclude-dir=.git
-fi
+/reload-plugins
+/my-first-plugin:search "TODO"
 ```
 
-## 출력 형식
-
-```
-🔍 "[검색어]" 검색 결과
-
-📁 src/utils.js:23
-  22: export function helper() {
-  23:   const [검색어] = useState();  ← 발견!
-  24:   return ...
-
-📁 src/app.js:45
-  44: // [검색어] 관련 로직
-  45: function process[검색어]() {  ← 발견!
-  46:   ...
-
-💡 총 2개 파일에서 5건 발견
-```
-EOF
-````
+Claude가 자동으로 Grep 도구를 사용해서 TODO를 검색합니다.
 
 ---
 
-## 🇰🇷 한글 검색 지원
+## 🎨 2단계: 결과 포맷팅
 
-### 문제점
+검색 결과를 더 보기 좋게 정리합니다.
 
 ```bash
-# 한글 검색이 안 되는 경우
-grep "한글" file.js
-# → 깨지거나 안 나옴
-```
-
-### 해결: 인코딩 처리
-
-````bash
-cat > ~/.claude/plugins/my-first-plugin/skills/search.md << 'EOF'
+cat > ~/.claude/plugins/my-first-plugin/skills/search/SKILL.md << 'SKILLEOF'
 ---
-name: search
-description: 한글 지원 코드 검색
+description: 프로젝트에서 키워드를 검색하고 정리해서 보여줍니다
+disable-model-invocation: true
+argument-hint: [keyword]
 ---
 
-# Code Search (한글 지원)
+# Code Search
 
-## 인코딩 확인
+프로젝트에서 키워드를 검색하세요.
+
+## 1. 검색 실행
+Grep 도구로 키워드를 검색하세요.
+
+## 2. 결과 분석
+- 총 몇 개 파일에서 발견되었는지
+- 각 파일에서 몇 번 등장하는지
+
+## 3. 결과 표시
+
+다음 형식으로 보여주세요:
+
+검색 키워드: [keyword]
+발견된 파일: X개
+
+파일별 결과:
+[파일1] (N개)
+  - 줄번호: 내용
+  - 줄번호: 내용
+
+[파일2] (M개)
+  - 줄번호: 내용
+SKILLEOF
+```
+
+### 테스트
 
 ```bash
-# 파일 인코딩 감지
-file --mime-encoding *.js | head -5
-
-# EUC-KR 파일이 있는지 확인
-if file *.js | grep -q "ISO-8859\|EUC-KR"; then
-  echo "⚠️  인코딩 변환이 필요할 수 있습니다"
-fi
+/reload-plugins
+/my-first-plugin:search "function"
 ```
-
-## UTF-8로 검색
-
-```bash
-# LC_ALL 설정으로 UTF-8 강제
-LC_ALL=ko_KR.UTF-8 rg "[검색어]" \
-  --type js \
-  --type ts \
-  --type md
-```
-
-## 한글 패턴 검색
-
-```bash
-# 한글 변수명 찾기
-rg "const [가-힣]+ =" --type js
-
-# 한글 주석 찾기
-rg "//.*[가-힣]+" --type js
-
-# 한글 문자열 찾기
-rg '"[^"]*[가-힣]+[^"]*"' --type js
-```
-
-## 결과 출력
-
-한글이 포함된 결과를 이쁘게:
-
-```
-🔍 한글 검색: "[검색어]"
-
-📁 src/auth.js:12
-  11: // 사용자 로그인 처리
-  12: const 로그인상태 = false;  ← 한글 변수명
-  13: 
-
-📁 README.md:45
-  44: ## 로그인 기능
-  45: 사용자 인증을 처리합니다.  ← 한글 문서
-  46: 
-
-✅ 한글이 올바르게 표시됨
-💡 2개 파일에서 2건 발견
-```
-EOF
-````
-
----
-
-## 🎯 고급 검색 기능
-
-### 파일 타입별 검색
-
-````bash
-cat > ~/.claude/plugins/my-first-plugin/skills/search.md << 'EOF'
----
-name: search
-description: 고급 코드 검색
----
-
-# Advanced Code Search
-
-## 옵션
-
-사용자에게 질문:
-
-1. **검색어가 무엇인가요?**
-2. **파일 타입을 지정하시겠습니까?**
-   - JavaScript/TypeScript
-   - Python
-   - 전체
-
-3. **검색 옵션**
-   - 대소문자 구분
-   - 정규식 사용
-   - 숨김 파일 포함
-
-## 검색 실행
-
-### JavaScript/TypeScript
-
-```bash
-rg "$query" \
-  --type js \
-  --type jsx \
-  --type ts \
-  --type tsx \
-  --glob '!node_modules' \
-  --glob '!dist'
-```
-
-### Python
-
-```bash
-rg "$query" \
-  --type py \
-  --glob '!__pycache__' \
-  --glob '!*.pyc'
-```
-
-### 정규식 모드
-
-```bash
-# 이메일 패턴
-rg '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
-
-# 전화번호 패턴
-rg '\d{3}-\d{4}-\d{4}'
-
-# 한글 + 영문 조합
-rg '[가-힣]+[a-zA-Z]+'
-```
-
-## 결과 필터링
-
-### 파일명만
-
-```bash
-rg "$query" --files-with-matches
-```
-
-### 카운트만
-
-```bash
-rg "$query" --count
-```
-
-### 컨텍스트 포함
-
-```bash
-# 앞뒤 3줄씩
-rg "$query" -C 3
-
-# 앞 5줄
-rg "$query" -B 5
-
-# 뒤 2줄
-rg "$query" -A 2
-```
-
-## 출력
-
-사용자가 선택한 옵션에 따라 다르게 출력:
-
-```
-🔍 검색: "$query"
-📋 옵션: [선택된 옵션들]
-
-[결과...]
-
-📊 통계:
-  - 파일: X개
-  - 매칭: Y건
-  - 소요 시간: Zms
-```
-EOF
-````
-
----
-
-## 🔥 실전 검색 패턴
-
-### TODO 찾기
-
-````bash
-cat > ~/.claude/plugins/my-first-plugin/skills/find-todos.md << 'EOF'
----
-name: find-todos
-description: TODO/FIXME 주석 찾기
-aliases: [todos, todo-list]
----
-
-# Find TODOs
-
-프로젝트의 모든 TODO를 찾습니다.
-
-## 검색
-
-```bash
-rg "TODO|FIXME|HACK|XXX|NOTE" \
-  --type js --type ts --type py \
-  --no-heading \
-  --with-filename \
-  --line-number
-```
-
-## 분류
-
-```bash
-# TODO 개수
-todo_count=$(rg "TODO" --count | awk '{s+=$1}END{print s}')
-
-# FIXME 개수
-fixme_count=$(rg "FIXME" --count | awk '{s+=$1}END{print s}')
-
-# 파일별 카운트
-rg "TODO|FIXME" --count --sort path
-```
-
-## 출력
-
-```
-📝 TODO 리스트
-
-## 🔴 FIXME (긴급) - 3건
-
-📁 src/auth.js:45
-  // FIXME: 보안 취약점 수정 필요
-
-📁 src/api.js:123
-  // FIXME: 에러 처리 추가
-
-
-## 🟡 TODO (일반) - 12건
-
-📁 src/utils.js:34
-  // TODO: 성능 최적화
-
-📁 README.md:100
-  <!-- TODO: API 문서 작성 -->
-
-...
-
-📊 요약:
-  - FIXME: 3건 (우선 처리 필요)
-  - TODO: 12건
-  - HACK: 1건
-  - 총 16건
-```
-EOF
-````
-
-### 함수/클래스 찾기
-
-```bash
-cat > ~/.claude/plugins/my-first-plugin/skills/find-functions.md << 'EOF'
----
-name: find-functions
-description: 함수/클래스 정의 찾기
----
-
-# Find Functions & Classes
-
-## JavaScript/TypeScript
-
-```bash
-# 함수 선언
-rg "function\s+\w+" --type js
-
-# Arrow 함수
-rg "const\s+\w+\s*=\s*\(" --type js
-
-# 클래스
-rg "class\s+\w+" --type js
-
-# Export된 함수
-rg "export\s+(function|const|class)" --type js
-```
-
-## Python
-
-```bash
-# 함수
-rg "def\s+\w+" --type py
-
-# 클래스
-rg "class\s+\w+" --type py
-
-# 데코레이터
-rg "@\w+" --type py
-```
-
-## 출력
-
-```
-🔍 함수 및 클래스 정의
-
-## 📦 Classes (5개)
-
-src/User.js:
-  class User
-  
-src/Auth.js:
-  class AuthService
-
-## 🔧 Functions (23개)
-
-src/utils.js:
-  function formatDate
-  function validateEmail
-  const parseJSON = () => ...
-
-📊 총 28개 정의 발견
-```
-EOF
-```
-
----
-
-## 🛠️ 검색 도구 비교
-
-| 도구 | 속도 | 기능 | 설치 |
-|:-----|:-----|:-----|:-----|
-| **ripgrep (rg)** | ⚡⚡⚡ 매우 빠름 | ⭐⭐⭐ 풍부 | brew install ripgrep |
-| **grep** | ⚡⚡ 보통 | ⭐⭐ 기본 | 기본 설치 |
-| **ag** | ⚡⚡ 빠름 | ⭐⭐⭐ 좋음 | brew install ag |
-| **ack** | ⚡ 느림 | ⭐⭐ 기본 | brew install ack |
-
-**추천:** ripgrep (rg)
 
 ---
 
 ## 📚 핵심 정리
 
-### 검색 패턴
+### Claude Code의 도구 시스템
 
-```bash
-# 1. 기본 검색
-rg "keyword"
+Claude Code는 여러 내장 도구를 제공합니다:
+- **Read**: 파일 읽기
+- **Grep**: 코드 검색
+- **Bash**: 명령어 실행
+- **Edit**: 파일 수정
+- **Write**: 파일 쓰기
 
-# 2. 파일 타입 지정
-rg "keyword" --type js
+### Skill에서 도구 사용하기
 
-# 3. 디렉토리 제외
-rg "keyword" --glob '!node_modules'
+Skill은 Claude에게 "어떤 도구를 사용할지" 알려줍니다.
 
-# 4. 정규식
-rg "pattern.*regex"
-
-# 5. 대소문자 무시
-rg "keyword" -i
-
-# 6. 단어 단위
-rg "keyword" -w
+```markdown
+Grep 도구를 사용해서 검색하세요.
 ```
 
-### 한글 처리
+이렇게 작성하면 Claude가 자동으로 Grep 도구를 사용합니다.
 
-```bash
-# UTF-8 강제
-LC_ALL=ko_KR.UTF-8 rg "한글"
+### 도구 사용의 장점
 
-# 한글 패턴
-rg "[가-힣]+"
-
-# 인코딩 확인
-file --mime-encoding *.js
-```
-
----
-
-## ✅ 연습 문제
-
-### 과제: 민감 정보 찾기
-
-**요구사항:**
-- API 키, 비밀번호, 토큰 검색
-- 파일 경로와 라인 번호
-- 보안 경고
-
-**패턴:**
-```regex
-API_KEY
-password\s*=
-token\s*=
-secret
-```
-
-<details>
-<summary>정답 보기</summary>
-
-````bash
-cat > ~/.claude/plugins/my-first-plugin/skills/find-secrets.md << 'EOF'
----
-name: find-secrets
-description: 민감 정보 검색 (보안)
----
-
-# Find Secrets
-
-## 검색 패턴
-
-```bash
-rg "API_KEY|SECRET|PASSWORD|TOKEN" \
-  --ignore-case \
-  --type js --type ts --type py \
-  --glob '!*.md' \
-  --glob '!test/*'
-```
-
-## 출력
-
-```
-🔐 민감 정보 검색 결과
-
-⚠️  경고: 다음 파일에 민감 정보가 포함되어 있을 수 있습니다
-
-📁 src/config.js:12
-  const API_KEY = "abc123..."  ← 하드코딩된 키!
-
-💡 권장사항:
-  - .gitignore에 추가
-  - 환경 변수로 이동
-  - Secrets Manager 사용
-```
-EOF
-````
-
-</details>
+- ✅ 직접 구현할 필요 없음
+- ✅ Claude Code가 최적화된 방법 제공
+- ✅ 일관된 결과
 
 ---
 
 ## 🎉 완료!
 
-강력한 코드 검색 도구를 만들었습니다!
+Claude Code의 도구를 사용하는 Skill을 만들었습니다!
 
 **배운 것:**
-- ✅ ripgrep 활용
-- ✅ 한글 처리
-- ✅ 정규식 패턴
-- ✅ 실전 검색 예제
+- ✅ Claude Code의 도구 시스템 이해
+- ✅ Grep 도구 사용
+- ✅ 도구 사용 지침 작성
+- ✅ 결과 포맷팅
 
-[Step 6: 플러그인 배포 →](step-06-publish)
+**핵심 개념:**
+- Skill은 Claude가 "어떻게 할지" 알려주는 지침
+- Claude Code는 강력한 도구들을 내장
+- Skill에서 이 도구들을 활용할 수 있음
+
+### 다음 단계
+
+[Step 6: 배포하기 →](step-06-publish)
 {: .btn .btn-primary }

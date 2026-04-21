@@ -4,7 +4,7 @@ title: 홈
 nav_order: 1
 ---
 
-# Claude Code 플러그인 만들기
+# Claude 플러그인 만들기
 {: .fs-9 }
 
 **"이 파일은 왜 만드는 거지?"**  
@@ -38,7 +38,7 @@ cat > skills/hello.md
 ### 2. 내부 원리 설명
 - 왜 이 파일명이어야 하는가?
 - 왜 이 위치에 만들어야 하는가?
-- Claude Code가 내부적으로 어떻게 읽는가?
+- Claude가 내부적으로 어떻게 읽는가?
 - 각 줄이 무슨 역할을 하는가?
 
 ### 3. 실용적인 예제
@@ -52,7 +52,7 @@ cat > skills/hello.md
 ## 📚 학습 단계
 
 ### Step 0: 시작하기 전에 (5분)
-Claude Code와 플러그인 시스템을 이해합니다.
+Claude와 플러그인 시스템을 이해합니다.
 {: .text-grey-dk-000}
 
 [Step 0 시작 →](step-00-before-start)
@@ -149,7 +149,7 @@ Skill과 Command의 차이를 배우고 command를 만듭니다.
 
 ### 사전 준비
 
-✅ **Claude Code 설치**
+✅ **Claude 설치**
 ```bash
 # CLI, Desktop, 또는 Web 중 하나
 ```
@@ -176,7 +176,7 @@ Skill과 Command의 차이를 배우고 command를 만듭니다.
 
 ## 💡 이런 분들께 추천
 
-- ✅ Claude Code를 쓰고는 있지만 잘 모르겠는 분
+- ✅ Claude를 쓰고는 있지만 잘 모르겠는 분
 - ✅ Skill/Command를 만들고 싶은데 어떻게 시작해야 할지 모르는 분
 - ✅ 예제를 보면 이해는 가는데 내가 만들려니 막막한 분
 - ✅ 내부 동작 원리를 제대로 이해하고 싶은 분

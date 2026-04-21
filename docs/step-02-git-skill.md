@@ -7,7 +7,7 @@ nav_order: 4
 # Step 2: 실용적인 Git Skill 만들기
 {: .no_toc }
 
-⏱️ 15분
+⏱️ 10분
 {: .label .label-green }
 
 실제로 쓸 수 있는 Git 상태 확인 skill을 만듭니다.
@@ -23,515 +23,159 @@ nav_order: 4
 
 ## 🎯 목표
 
-**만들 것:** Git 저장소의 상태를 한눈에 보여주는 skill
+**만들 것:** Git 저장소 상태를 한눈에 보여주는 skill
 
 **기능:**
 - 현재 브랜치
 - 변경된 파일 수
 - Staged/Unstaged 구분
-- 커밋 필요 여부
+- 다음 행동 추천
 
 ---
 
-## 📝 1단계: 기본 파일 만들기
+## 📝 1단계: 기본 Skill 만들기
 
-### 실행하기
+### 디렉토리 생성
 
-````bash
-cat > ~/.claude/plugins/my-first-plugin/skills/gs.md << 'EOF'
----
-name: gs
-description: Git 상태 확인 (git status)
-aliases: [gitstatus, gstat]
----
-
-# Git Status Skill
-
-Git 저장소의 현재 상태를 보여드립니다.
-
-## 브랜치 확인
 ```bash
-git branch --show-current
+mkdir -p ~/.claude/plugins/my-first-plugin/skills/gs
 ```
 
-## 변경사항 확인
+### SKILL.md 생성
+
 ```bash
-git status --short
-```
-EOF
-````
-
-### 새로운 점
-
-#### aliases 필드
-
-```yaml
+cat > ~/.claude/plugins/my-first-plugin/skills/gs/SKILL.md << 'SKILLEOF'
 ---
-name: gs
-aliases: [gitstatus, gstat]
+description: Git 상태를 확인합니다
 ---
+
+Git 저장소의 현재 상태를 보여주세요.
+
+브랜치를 확인하세요.
+변경된 파일을 확인하세요.
+SKILLEOF
 ```
-
-**의미:**
-- `/gs` 로 실행 가능
-- `/gitstatus` 로도 실행 가능
-- `/gstat` 로도 실행 가능
-
-**왜 유용한가?**
-- 짧은 이름 + 긴 이름 둘 다 지원
-- 사용자가 편한 걸로 선택
 
 ### 테스트
 
 ```bash
-# Claude Code 재시작 후
+/reload-plugins
+/my-first-plugin:gs
+```
 
-/gs
+Claude가 자동으로 `git branch --show-current`와 `git status` 명령어를 실행합니다.
+
+---
+
+## 🎨 2단계: 출력 형식 지정
+
+Claude가 출력 형식을 알 수 있도록 지침을 추가합니다.
+
+```bash
+cat > ~/.claude/plugins/my-first-plugin/skills/gs/SKILL.md << 'SKILLEOF'
+---
+description: Git 상태를 한눈에 보여줍니다
+---
+
+Git 저장소의 현재 상태를 확인하고 다음 형식으로 보여주세요:
+
+## 브랜치
+현재 브랜치를 보여주세요.
+
+## 변경사항
+- Staged 파일 수
+- Unstaged 파일 수
+- Untracked 파일 수
+
+## 파일 목록
+변경된 파일들을 카테고리별로 보여주세요.
+
+## 다음 행동
+상태에 따라 권장 행동을 제안하세요.
+SKILLEOF
+```
+
+### 테스트
+
+```bash
+/reload-plugins
+/my-first-plugin:gs
 ```
 
 **예상 결과:**
 
 ```
-## 브랜치 확인
+## 브랜치
 main
 
-## 변경사항 확인
- M src/app.js
-?? new-file.txt
-```
+## 변경사항
+- Staged: 2개
+- Unstaged: 1개
+- Untracked: 1개
 
----
+## 파일 목록
+Staged:
+- src/app.js
+- src/utils.js
 
-## 🎨 2단계: 결과 포맷팅
+Unstaged:
+- README.md
 
-단순한 명령어 실행은 누구나 할 수 있습니다.  
-**차별점:** 결과를 보기 좋게 만들기!
+Untracked:
+- temp.txt
 
-### 개선된 버전
-
-````bash
-cat > ~/.claude/plugins/my-first-plugin/skills/gs.md << 'EOF'
----
-name: gs
-description: Git 상태 확인 (git status)
-aliases: [gitstatus]
----
-
-# Git Status
-
-현재 Git 저장소의 상태를 확인합니다.
-
-## 실행 단계
-
-### 1. 브랜치 확인
-```bash
-git branch --show-current
-```
-
-### 2. 변경사항 요약
-```bash
-git status --short
-```
-
-### 3. Staged 파일
-```bash
-git diff --cached --name-only
-```
-
-### 4. Unstaged 파일
-```bash
-git diff --name-only
-```
-
-## 출력 형식
-
-다음 형식으로 정리해주세요:
-
-```
-🌿 브랜치: [브랜치명]
-
-📝 변경사항:
-  - Staged: X개
-  - Unstaged: Y개
-  - Untracked: Z개
-
-📁 파일 목록:
-  [파일들]
-
-💡 다음 행동: [추천]
-```
-EOF
-````
-
-### 무엇이 바뀌었나?
-
-1. **단계별 명령어**
-   ```markdown
-   ### 1. 브랜치 확인
-   ### 2. 변경사항 요약
-   ```
-   Claude가 순서대로 실행
-
-2. **출력 형식 지정**
-   ```markdown
-   ## 출력 형식
-   
-   다음 형식으로 정리해주세요:
-   ```
-   Claude가 이 형식을 따라서 출력
-
-3. **이모지 활용**
-   ```
-   🌿 🌿 💡
-   ```
-   시각적으로 구분 쉬움
-
-### 테스트
-
-```
-/gs
-```
-
-**예상 결과:**
-
-```
-🌿 브랜치: main
-
-📝 변경사항:
-  - Staged: 2개
-  - Unstaged: 1개
-  - Untracked: 1개
-
-📁 파일 목록:
-  Staged:
-    - src/app.js
-    - src/utils.js
-  Unstaged:
-    - README.md
-  Untracked:
-    - temp.txt
-
-💡 다음 행동: 2개 파일이 staged 상태입니다. git commit으로 커밋하세요.
+## 다음 행동
+2개 파일이 staged 상태입니다. git commit으로 커밋하세요.
 ```
 
 ---
 
 ## 🛡️ 3단계: 에러 처리
 
-Git 저장소가 아닌 곳에서 실행하면?
+Git 저장소가 아닌 곳에서 실행하면 에러가 발생합니다. 사전 확인을 추가합니다.
 
-```
-fatal: not a git repository
-```
-
-사용자 경험이 안 좋습니다. 개선해봅시다!
-
-### 개선된 버전
-
-````bash
-cat > ~/.claude/plugins/my-first-plugin/skills/gs.md << 'EOF'
+```bash
+cat > ~/.claude/plugins/my-first-plugin/skills/gs/SKILL.md << 'SKILLEOF'
 ---
-name: gs
-description: Git 상태 확인
-aliases: [gitstatus]
+description: Git 상태를 확인합니다. Git 저장소에서만 사용하세요.
 ---
 
-# Git Status
+# Git Status Skill
 
-## 사전 확인
+## 1단계: Git 저장소 확인
 
-먼저 Git 저장소인지 확인:
-```bash
-if [ -d ".git" ]; then
-  echo "✅ Git 저장소입니다"
-else
-  echo "❌ Git 저장소가 아닙니다"
-  exit 1
-fi
+먼저 현재 디렉토리가 Git 저장소인지 확인하세요.
+Git 저장소가 아니면 "Git 저장소가 아닙니다"라고 알려주고 종료하세요.
+
+## 2단계: 브랜치 확인
+
+현재 브랜치를 확인하세요.
+
+## 3단계: 상태 확인
+
+다음 정보를 확인하세요:
+- Staged 파일 (커밋 대기 중)
+- Unstaged 파일 (수정되었지만 staged 안 됨)
+- Untracked 파일 (Git이 추적하지 않는 새 파일)
+
+## 4단계: 결과 정리
+
+다음 형식으로 보여주세요:
+
+브랜치: [브랜치명]
+
+변경사항:
+- Staged: X개
+- Unstaged: Y개
+- Untracked: Z개
+
+파일 목록:
+[카테고리별로 파일들]
+
+다음 행동:
+[상태에 따른 권장 행동]
+SKILLEOF
 ```
-
-## Git 저장소인 경우
-
-### 브랜치
-```bash
-git branch --show-current
-```
-
-### 상태
-```bash
-git status --short
-```
-
-### Staged 파일 수
-```bash
-git diff --cached --name-only | wc -l
-```
-
-### Unstaged 파일 수
-```bash
-git diff --name-only | wc -l
-```
-
-### Untracked 파일 수
-```bash
-git ls-files --others --exclude-standard | wc -l
-```
-
-## 출력
-
-위 결과를 바탕으로:
-
-```
-🌿 브랜치: [브랜치]
-
-📊 요약:
-  Staged: X개
-  Unstaged: Y개
-  Untracked: Z개
-
-💡 상태:
-  [커밋 필요/깔끔함/충돌 있음 등]
-```
-EOF
-````
-
-### 새로운 점
-
-#### 1. 사전 확인
-
-```bash
-if [ -d ".git" ]; then
-  echo "✅ Git 저장소입니다"
-else
-  echo "❌ Git 저장소가 아닙니다"
-  exit 1
-fi
-```
-
-**동작:**
-- `.git` 폴더 있으면 → 계속 진행
-- 없으면 → 에러 메시지 + 종료
-
-#### 2. 개수 세기
-
-```bash
-git diff --cached --name-only | wc -l
-```
-
-- `git diff --cached --name-only`: 파일 목록
-- `| wc -l`: 줄 수 세기 (= 파일 수)
-
-#### 3. Untracked 파일
-
-```bash
-git ls-files --others --exclude-standard
-```
-
-- `--others`: 추적 안 되는 파일
-- `--exclude-standard`: .gitignore 적용
-
-### 테스트
-
-**Git 저장소에서:**
-```
-/gs
-
-→ 정상 출력
-```
-
-**Git 저장소가 아닌 곳에서:**
-```
-/gs
-
-→ ❌ Git 저장소가 아닙니다
-```
-
----
-
-## ⚡ 4단계: 성능 개선
-
-여러 명령어를 실행하면 느립니다.  
-한 번에 모든 정보를 가져와봅시다!
-
-### 최적화 버전
-
-````bash
-cat > ~/.claude/plugins/my-first-plugin/skills/gs.md << 'EOF'
----
-name: gs
-description: Git 상태 빠른 확인
-aliases: [gitstatus]
----
-
-# Git Status (Fast)
-
-## Git 저장소 확인
-```bash
-git rev-parse --git-dir > /dev/null 2>&1 && echo "yes" || echo "no"
-```
-
-## 한 번에 모든 정보 가져오기
-
-```bash
-# 브랜치
-branch=$(git branch --show-current)
-
-# 상태 (한 번만 호출)
-status=$(git status --short)
-
-# 개수 세기
-staged=$(echo "$status" | grep '^[MADRC]' | wc -l | tr -d ' ')
-unstaged=$(echo "$status" | grep '^ [MD]' | wc -l | tr -d ' ')
-untracked=$(echo "$status" | grep '^??' | wc -l | tr -d ' ')
-
-# 출력
-echo "Branch: $branch"
-echo "Staged: $staged"
-echo "Unstaged: $unstaged"
-echo "Untracked: $untracked"
-echo ""
-echo "$status"
-```
-
-## 결과 포맷팅
-
-위 정보를 보기 좋게 정리:
-
-```
-🌿 브랜치: [branch]
-
-📊 변경사항: [총 개수]개
-  • Staged: [staged]개 (커밋 대기)
-  • Unstaged: [unstaged]개 (수정됨)
-  • Untracked: [untracked]개 (새 파일)
-
-📁 파일 목록:
-[status 출력]
-
-💡 권장 행동:
-[staged > 0 → git commit 추천]
-[unstaged > 0 → git add 추천]
-[모두 0 → 깔끔한 상태]
-```
-EOF
-````
-
-### 최적화 포인트
-
-#### 1. 한 번의 git status
-
-```bash
-# 이전 (3번 호출)
-git diff --cached --name-only | wc -l
-git diff --name-only | wc -l
-git ls-files --others | wc -l
-
-# 최적화 (1번 호출)
-status=$(git status --short)
-echo "$status" | grep '^[MADRC]' | wc -l  # Staged
-echo "$status" | grep '^ [MD]' | wc -l    # Unstaged
-echo "$status" | grep '^??' | wc -l       # Untracked
-```
-
-#### 2. git status --short 패턴
-
-```
-M  file1.js    ← Staged (첫 글자가 대문자)
- M file2.js    ← Unstaged (첫 글자가 공백)
-?? file3.js    ← Untracked
-A  file4.js    ← Added (Staged)
-```
-
-패턴:
-- `^[MADRC]`: Staged (Modified, Added, Deleted, Renamed, Copied)
-- `^ [MD]`: Unstaged (Modified, Deleted)
-- `^??`: Untracked
-
----
-
-## 🎨 5단계: 추가 기능
-
-### Upstream 비교
-
-```bash
-# 현재 브랜치가 upstream과 얼마나 차이나는지
-ahead=$(git rev-list @{u}..HEAD 2>/dev/null | wc -l | tr -d ' ')
-behind=$(git rev-list HEAD..@{u} 2>/dev/null | wc -l | tr -d ' ')
-```
-
-- `ahead`: 로컬에만 있는 커밋 수
-- `behind`: 원격에만 있는 커밋 수
-
-### 최종 버전
-
-````bash
-cat > ~/.claude/plugins/my-first-plugin/skills/gs.md << 'EOF'
----
-name: gs
-description: Git 상태 종합 확인
-aliases: [gitstatus, gst]
----
-
-# Git Status (Complete)
-
-## 모든 정보 한 번에
-
-```bash
-#!/bin/bash
-
-# Git 저장소 확인
-if ! git rev-parse --git-dir > /dev/null 2>&1; then
-  echo "❌ Git 저장소가 아닙니다"
-  exit 1
-fi
-
-# 정보 수집
-branch=$(git branch --show-current)
-status=$(git status --short)
-staged=$(echo "$status" | grep '^[MADRC]' | wc -l | tr -d ' ')
-unstaged=$(echo "$status" | grep '^ [MD]' | wc -l | tr -d ' ')
-untracked=$(echo "$status" | grep '^??' | wc -l | tr -d ' ')
-
-# Upstream 비교
-ahead=$(git rev-list @{u}..HEAD 2>/dev/null | wc -l | tr -d ' ')
-behind=$(git rev-list HEAD..@{u} 2>/dev/null | wc -l | tr -d ' ')
-
-# 출력
-echo "Branch: $branch"
-echo "Staged: $staged"
-echo "Unstaged: $unstaged"
-echo "Untracked: $untracked"
-echo "Ahead: $ahead"
-echo "Behind: $behind"
-echo ""
-echo "=== Files ==="
-echo "$status"
-```
-
-## 결과를 보기 좋게
-
-위 정보를 이 형식으로:
-
-```
-🌿 브랜치: [branch]
-
-📊 로컬 변경사항:
-  • Staged: [staged]개
-  • Unstaged: [unstaged]개
-  • Untracked: [untracked]개
-
-🔄 원격 비교:
-  • Ahead: [ahead]개 커밋 (push 필요)
-  • Behind: [behind]개 커밋 (pull 필요)
-
-📁 파일:
-[파일 목록]
-
-💡 권장 행동:
-[상태에 따른 추천]
-```
-EOF
-````
 
 ---
 
@@ -539,79 +183,34 @@ EOF
 
 ### Skill 작성 패턴
 
-```markdown
-1. 사전 확인 (Git 저장소인지)
-2. 정보 수집 (명령어 실행)
-3. 결과 포맷팅 (보기 좋게)
-4. 권장 행동 (다음 할 일)
-```
+1. **사전 확인**: 에러 상황 체크 (Git 저장소인지 확인)
+2. **정보 수집**: 필요한 데이터 확인 (브랜치, 변경사항)
+3. **결과 정리**: 보기 좋게 포맷팅 (카테고리별 정리)
+4. **권장 행동**: 다음 할 일 제시 (commit/add 권장)
 
-### 좋은 Skill의 조건
+### Description 작성 팁
 
-1. **빠름**: 불필요한 명령어 중복 제거
-2. **안전함**: 에러 처리
-3. **명확함**: 결과가 이해하기 쉬움
-4. **유용함**: 다음 행동 제시
-
+```yaml
 ---
-
-## ✅ 연습 문제
-
-### 과제: "gc" (Git Commit) Skill
-
-**요구사항:**
-- 이름: `gc`
-- Staged 파일들을 보여주고
-- 커밋 메시지 제안
-- Conventional Commits 형식
-
-**힌트:**
-```bash
-# Staged 파일
-git diff --cached --name-only
-
-# 파일 타입 분석
-# .js → feat:
-# .md → docs:
-# test.js → test:
-```
-
-<details>
-<summary>정답 예시 보기</summary>
-
-```markdown
+description: 무엇을 하는지 명확하게. Claude가 언제 사용할지 판단.
 ---
-name: gc
-description: Git commit 도우미
----
-
-# Git Commit Helper
-
-## Staged 파일 확인
-```bash
-git diff --cached --name-only
 ```
 
-## 파일 분석 및 메시지 제안
+좋은 예:
+- "Git 상태를 확인합니다"
+- "Git 상태를 한눈에 보여줍니다"
 
-위 파일들을 보고:
-1. 주요 변경 파일 타입 파악
-2. Conventional Commits 형식으로 메시지 제안
-   - .js, .ts → feat: 또는 fix:
-   - .md → docs:
-   - test.* → test:
-   - package.json → chore:
+나쁜 예:
+- "git" (너무 모호)
+- "상태 확인" (무슨 상태?)
 
-형식:
-```
-type: 간단한 설명
+### Skill 작성 팁
 
-- 상세 내용 1
-- 상세 내용 2
-```
-```
-
-</details>
+**좋은 Skill의 특징:**
+1. 명확한 단계별 지침
+2. 예상 결과/형식 명시
+3. 에러 케이스 사전 확인
+4. 사용자에게 도움이 되는 정보 제공
 
 ---
 
@@ -619,11 +218,20 @@ type: 간단한 설명
 
 실용적인 Git Skill을 만들었습니다!
 
-**배운 것:**
-- ✅ 에러 처리
-- ✅ 결과 포맷팅
-- ✅ 성능 최적화
-- ✅ 실용적인 기능
+**이번 Step에서 배운 것:**
+- ✅ Claude에게 명령어 실행 지침 작성하는 방법
+- ✅ 출력 형식을 명시해서 일관된 결과 얻기
+- ✅ 에러 처리를 위한 사전 확인 추가
+- ✅ 단계별로 구조화된 지침 작성
 
-[Step 3: Command 이해하기 →](step-03-command)
+**Step 1과의 차이:**
+- Step 1: 단순 메시지 출력 ("안녕하세요")
+- Step 2: 명령어 실행 + 결과 정리 (Git 상태 확인)
+
+**다음에는:**
+Step 3에서는 Claude가 자동으로 실행하지 않고, 사용자만 실행할 수 있는 수동 Skill을 배웁니다.
+
+### 다음 단계
+
+[Step 3: 수동 Skill 만들기 →](step-03-command)
 {: .btn .btn-primary }

@@ -10,7 +10,7 @@ nav_order: 8
 ⏱️ 10분
 {: .label .label-purple }
 
-만든 플러그인을 팀과 공유하고 배포하는 방법을 배웁니다.
+만든 플러그인을 팀과 공유하는 방법을 배웁니다.
 {: .fs-6 .fw-300 }
 
 ## 목차
@@ -23,435 +23,185 @@ nav_order: 8
 
 ## 🎯 목표
 
-**배포 방법 3가지:**
-1. Git 저장소 (가장 간단)
-2. npm 패키지 (공식)
-3. 로컬 공유 (팀 내부)
+**배포 방법:**
+1. Git 저장소로 공유 (가장 간단)
+2. 팀원 설치 가이드
 
 ---
 
-## 📦 방법 1: Git 저장소
+## 📦 Git 저장소 만들기
 
-### 가장 간단한 방법
-
-#### 1. 저장소 만들기
+### 1. Git 초기화
 
 ```bash
 cd ~/.claude/plugins/my-first-plugin
 
-# Git 초기화
 git init
+```
 
-# .gitignore 추가
+### 2. .gitignore 추가
+
+```bash
 cat > .gitignore << 'EOF'
 .DS_Store
 *.log
-node_modules/
+.omc/
 EOF
-
-# 커밋
-git add .
-git commit -m "feat: 첫 플러그인 완성"
 ```
 
-#### 2. GitHub/GitLab에 푸시
+### 3. README 작성
 
 ```bash
-# Remote 추가
-git remote add origin https://github.com/username/my-claude-plugin.git
-
-# 푸시
-git push -u origin main
-```
-
-#### 3. 다른 사람이 설치
-
-```bash
-# 방법 1: Clone
-cd ~/.claude/plugins
-git clone https://github.com/username/my-claude-plugin.git
-
-# 방법 2: Submodule (추천)
-cd ~/.claude/plugins
-git submodule add https://github.com/username/my-claude-plugin.git
-```
-
-### README 작성
-
-````markdown
+cat > README.md << 'EOF'
 # My First Plugin
 
 Claude Code 플러그인입니다.
 
-## 📦 설치
+## 설치
 
 ```bash
 cd ~/.claude/plugins
-git clone https://github.com/username/my-claude-plugin.git
-
-# Claude Code 재시작
+git clone https://github.com/username/my-first-plugin.git
 ```
 
-## 📚 포함된 기능
+Claude 재시작 후 사용 가능합니다.
 
-### Skills
-- `/gs` - Git 상태 확인
-- `/jira-bug` - Jira 버그 티켓 생성
-- `/search` - 코드 검색
+## 포함된 Skills
 
-### Commands
-- `/qc` - 빠른 커밋
-- `/qp` - 빠른 푸시
-- `/br` - 브랜치 목록
-
-## ⚙️ 설정
-
-환경 변수 설정이 필요합니다:
-
-```bash
-# ~/.bashrc 또는 ~/.zshrc에 추가
-export JIRA_URL="https://your-company.atlassian.net"
-export JIRA_EMAIL="your@email.com"
-export JIRA_TOKEN="your-token"
-```
-
-## 📖 사용법
-
-자세한 사용법은 [Wiki](https://github.com/username/my-claude-plugin/wiki)를 참고하세요.
-
-## 🤝 기여
-
-Pull Request 환영합니다!
-
-## 📄 라이선스
-
-MIT
-````
-
----
-
-## 📦 방법 2: npm 패키지
-
-### Claude Code 공식 방법
-
-#### 1. package.json 완성
-
-```bash
-cd ~/.claude/plugins/my-first-plugin
-
-cat > package.json << 'EOF'
-{
-  "name": "@yourname/claude-plugin",
-  "version": "1.0.0",
-  "description": "My Claude Code plugin",
-  "main": "plugin.json",
-  "keywords": ["claude", "claude-code", "plugin"],
-  "author": "Your Name <your@email.com>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/username/my-claude-plugin.git"
-  },
-  "files": [
-    "plugin.json",
-    "skills/**/*.md",
-    "commands/**/*.md"
-  ]
-}
+- `/my-first-plugin:hello` - 인사
+- `/my-first-plugin:gs` - Git 상태 확인
 EOF
 ```
 
-#### 2. npm 배포
+### 4. 커밋
 
 ```bash
-# npm 로그인
-npm login
-
-# 배포
-npm publish --access public
+git add .
+git commit -m "feat: initial plugin"
 ```
 
-#### 3. 다른 사람이 설치
+### 5. GitHub에 푸시
 
 ```bash
-# Claude Code CLI에서
-claude install @yourname/claude-plugin
-
-# 또는 수동
-cd ~/.claude/plugins
-npm install @yourname/claude-plugin
+# GitHub에서 저장소 생성 후
+git remote add origin https://github.com/username/my-first-plugin.git
+git push -u origin main
 ```
 
 ---
 
-## 📦 방법 3: 로컬 공유 (팀 내부)
+## 👥 팀원 설치 가이드
 
-### 프라이빗 Git 저장소 사용
+### 설치 방법
 
-#### 1. 공유 저장소에 커밋
+팀원들에게 다음 명령어를 공유하세요:
 
 ```bash
-# GitHub/GitLab 프라이빗 저장소
-git remote add origin https://github.com/org/claude-plugins.git
-git push origin main
+cd ~/.claude/plugins
+git clone https://github.com/username/my-first-plugin.git
 ```
 
-#### 2. 설치 스크립트
+그리고 Claude 재시작:
 
 ```bash
-cat > install.sh << 'EOF'
-#!/bin/bash
-
-PLUGIN_DIR="$HOME/.claude/plugins/team-plugin"
-
-echo "📦 Claude 플러그인 설치 중..."
-
-# 기존 제거
-if [ -d "$PLUGIN_DIR" ]; then
-  echo "기존 플러그인 제거..."
-  rm -rf "$PLUGIN_DIR"
-fi
-
-# Clone
-git clone https://github.com/org/claude-plugins.git "$PLUGIN_DIR"
-
-# 환경 변수 체크
-if [ -z "$JIRA_URL" ]; then
-  echo ""
-  echo "⚠️  Jira 환경 변수를 설정하세요:"
-  echo "export JIRA_URL=\"...\""
-  echo "export JIRA_TOKEN=\"...\""
-fi
-
-echo "✅ 설치 완료!"
-echo "Claude Code를 재시작하세요."
-EOF
-
-chmod +x install.sh
+# Ctrl+D 후
+claude
 ```
 
-#### 3. 팀원들에게 공유
+### 사용 방법
 
 ```bash
-# 설치 방법
-curl -sSL https://github.com/org/claude-plugins/raw/main/install.sh | bash
+/my-first-plugin:hello
+/my-first-plugin:gs
 ```
 
 ---
 
 ## 🔄 업데이트
 
-### Git 저장소
+### 플러그인 업데이트
 
 ```bash
 cd ~/.claude/plugins/my-first-plugin
-
-# 최신 버전 받기
-git pull origin main
-
-# Claude Code 재시작
+git pull
 ```
 
-### npm 패키지
+Claude 재시작 후 적용됩니다.
+
+---
+
+## 📚 핵심 정리
+
+### 필수 파일 구조
+
+```
+my-first-plugin/
+├── .claude-plugin/
+│   └── plugin.json
+├── skills/
+│   ├── hello/
+│   │   └── SKILL.md
+│   └── gs/
+│       └── SKILL.md
+├── .gitignore
+└── README.md
+```
+
+### plugin.json 확인
+
+```json
+{
+  "name": "my-first-plugin",
+  "version": "1.0.0",
+  "description": "내 첫 번째 플러그인",
+  "author": {
+    "name": "Your Name"
+  }
+}
+```
+
+---
+
+## 🎓 개인 Skills 공유
+
+플러그인 대신 개인 skills를 공유할 수도 있습니다.
+
+### 저장소 구조
+
+```
+my-claude-skills/
+├── README.md
+└── skills/
+    ├── hello/
+    │   └── SKILL.md
+    └── gs/
+        └── SKILL.md
+```
+
+### 설치 방법
 
 ```bash
-# 최신 버전 업데이트
-claude update @yourname/claude-plugin
-
-# 또는
-cd ~/.claude/plugins/@yourname/claude-plugin
-npm update
+cd ~/.claude
+git clone https://github.com/username/my-claude-skills.git temp
+cp -r temp/skills/* skills/
+rm -rf temp
 ```
 
 ---
 
-## 📋 버전 관리
+## ✅ 완료!
 
-### Semantic Versioning
-
-```
-1.0.0
-│ │ │
-│ │ └─ Patch: 버그 수정
-│ └─── Minor: 새 기능 (하위 호환)
-└───── Major: Breaking Changes
-```
-
-### 버전 올리기
-
-```bash
-# Patch (1.0.0 → 1.0.1)
-npm version patch
-
-# Minor (1.0.0 → 1.1.0)
-npm version minor
-
-# Major (1.0.0 → 2.0.0)
-npm version major
-
-# Git 태그 자동 생성됨
-git push --tags
-```
-
----
-
-## 📖 문서화
-
-### Wiki 구성
-
-```
-📖 Wiki
-├── Home
-│   └── 플러그인 소개
-├── Installation
-│   └── 설치 방법
-├── Skills
-│   ├── gs - Git 상태
-│   ├── jira-bug - Jira 티켓
-│   └── search - 코드 검색
-├── Commands
-│   ├── qc - 빠른 커밋
-│   └── qp - 빠른 푸시
-└── Configuration
-    └── 환경 변수 설정
-```
-
-### 각 Skill 문서
-
-````markdown
-# Git Status Skill
-
-## 사용법
-
-```
-/gs
-```
-
-## 기능
-
-- 현재 브랜치
-- 변경된 파일
-- Staged/Unstaged 구분
-- Upstream 비교
-
-## 예시
-
-```
-You: /gs
-
-🌿 브랜치: main
-📊 Staged: 2개
-...
-```
-
-## 옵션
-
-- `/gs --verbose` - 상세 정보
-````
-
----
-
-## 🎨 배지 추가
-
-README에 멋진 배지 추가:
-
-```markdown
-# My Claude Plugin
-
-![npm version](https://img.shields.io/npm/v/@yourname/claude-plugin)
-![license](https://img.shields.io/npm/l/@yourname/claude-plugin)
-![downloads](https://img.shields.io/npm/dt/@yourname/claude-plugin)
-```
-
----
-
-## 🤝 팀 협업
-
-### 이슈 템플릿
-
-```.github/ISSUE_TEMPLATE/bug_report.md
----
-name: Bug Report
-about: 버그 리포트
----
-
-## 버그 설명
-
-## 재현 방법
-1. 
-2. 
-3. 
-
-## 예상 동작
-
-## 실제 동작
-
-## 환경
-- OS: 
-- Claude Code 버전: 
-```
-
-### PR 템플릿
-
-```.github/pull_request_template.md
-## 변경 사항
-
-## 체크리스트
-- [ ] 테스트 완료
-- [ ] 문서 업데이트
-- [ ] CHANGELOG 업데이트
-```
-
----
-
-## 📊 사용 통계
-
-### 다운로드 수 확인
-
-```bash
-# npm
-npm info @yourname/claude-plugin
-
-# GitHub
-# Repository → Insights → Traffic
-```
-
----
-
-## 🎉 완료!
-
-플러그인을 배포하고 공유하는 방법을 배웠습니다!
+플러그인을 배포하는 방법을 배웠습니다!
 
 **배운 것:**
-- ✅ Git 저장소 배포
-- ✅ npm 패키지 배포
-- ✅ 로컬 공유
-- ✅ 버전 관리
-- ✅ 문서화
+- ✅ Git 저장소 만들기
+- ✅ README 작성
+- ✅ 팀원 설치 가이드
+- ✅ 업데이트 방법
 
----
+### 축하합니다!
 
-## 🚀 다음 단계
+전체 과정을 완료했습니다.
 
-축하합니다! 전체 과정을 완료했습니다.
-
-**이제 할 수 있는 것:**
-- ✅ Skill과 Command 만들기
-- ✅ 플러그인 구조 이해
-- ✅ 실전 예제 구현
-- ✅ 팀과 공유
-
-### 더 배우기
-
-- [Claude Code 공식 문서](https://docs.anthropic.com/claude/docs)
-- [예제 플러그인](https://github.com/anthropics/claude-code-examples)
-- [커뮤니티](https://discord.gg/claude)
-
-### 피드백
-
-이 가이드가 도움이 되었나요?  
-[Issues](https://github.com/username/claude-helper/issues)에 피드백을 남겨주세요!
-
----
-
-**Happy Coding! 🎉**
+[처음으로 돌아가기 →](../)
+{: .btn .btn-primary }

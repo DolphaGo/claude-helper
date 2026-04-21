@@ -10,7 +10,7 @@ nav_order: 2
 ⏱️ 5분
 {: .label .label-blue }
 
-본격적으로 시작하기 전에 Claude Code와 플러그인 시스템을 이해합니다.
+본격적으로 시작하기 전에 Claude와 플러그인 시스템을 이해합니다.
 {: .fs-6 .fw-300 }
 
 ## 목차
@@ -79,7 +79,8 @@ Skill과 Command를 **묶어서 배포하는 패키지**입니다.
 ```
 플러그인 구조:
 my-plugin/
-├── plugin.json          # 플러그인 정보
+├── .claude-plugin/
+│   └── plugin.json      # 플러그인 정보
 ├── skills/              # Skill들
 │   ├── review.md
 │   └── analyze.md
@@ -96,7 +97,7 @@ my-plugin/
 
 ```
 1. ~/.claude/plugins/ 디렉토리 스캔
-2. 각 플러그인의 plugin.json 읽기
+2. 각 플러그인의 .claude-plugin/plugin.json 읽기
 3. skills/와 commands/ 디렉토리에서 .md 파일 찾기
 4. 각 파일의 frontmatter 파싱
 5. 메모리에 등록
@@ -120,7 +121,8 @@ my-plugin/
 ```bash
 ~/.claude/plugins/        # 여기에 플러그인들이 있음
 └── my-plugin/            # 플러그인 이름 (자유)
-    ├── plugin.json       # 필수: 플러그인 정보
+    ├── .claude-plugin/
+    │   └── plugin.json   # 필수: 플러그인 정보
     ├── skills/           # 선택: skill 파일들
     └── commands/         # 선택: command 파일들
 ```
@@ -201,7 +203,7 @@ Claude Code가 이것을 파싱해서 skill을 등록합니다.
 ```
 [사용자]
   ↓ "/hello" 입력
-[Claude Code]
+[Claude]
   ↓ "hello"라는 name을 가진 skill 찾기
   ↓ ~/.claude/plugins/my-plugin/skills/hello.md 발견
   ↓ 파일 내용 전체 로드
@@ -234,7 +236,7 @@ Claude Code가 이것을 파싱해서 skill을 등록합니다.
 
 ### Q: 파일을 수정하면 바로 반영되나요?
 
-**A: 아니요.** Claude Code를 재시작해야 합니다.
+**A: 아니요.** Claude를 재시작해야 합니다.
 
 ```bash
 # CLI인 경우
