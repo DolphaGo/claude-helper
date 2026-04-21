@@ -1,0 +1,23 @@
+title: Claude Code 플러그인 만들기
+description: 파일 하나씩, 단계별로 따라하며 배우는 Claude Code 플러그인 개발
+remote_theme: just-the-docs/just-the-docs
+
+url: https://DolphaGo.github.io
+baseurl: /claude-helper
+
+search_enabled: true
+heading_anchors: true
+back_to_top: true
+enable_copy_code_button: true
+
+aux_links:
+  "GitHub":
+    - "https://github.com/DolphaGo/claude-helper"
+
+# 색상 테마
+color_scheme: dark
+
+# 플러그인
+plugins:
+  - jekyll-remote-theme
+  - jekyll-seo-tag

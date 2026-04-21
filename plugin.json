@@ -1,0 +1,15 @@
+{
+  "name": "claude-helper",
+  "version": "1.0.0",
+  "description": "커스텀 Claude skills & commands 모음",
+  "author": "Your Name",
+  "skills": {
+    "examples": ["skills/examples/**/*.md"],
+    "personal": ["skills/personal/**/*.md"],
+    "domains": ["skills/domains/**/*.md"]
+  },
+  "commands": {
+    "examples": ["commands/examples/**/*.md"],
+    "personal": ["commands/personal/**/*.md"]
+  }
+}

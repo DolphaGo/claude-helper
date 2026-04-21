@@ -1,0 +1,24 @@
+{
+  "name": "claude-helper",
+  "version": "1.0.0",
+  "description": "커스텀 Claude skills & commands 모음집",
+  "main": "plugin.json",
+  "scripts": {
+    "validate": "./validate.sh",
+    "install-plugin": "./install.sh",
+    "uninstall-plugin": "./uninstall.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Your Name/claude-helper.git"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "skills",
+    "commands",
+    "plugin"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}
