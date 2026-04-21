@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Step 0: 시작하기 전에"
-nav_order: 2
+nav_order: 0
 ---
 
 # Step 0: 시작하기 전에

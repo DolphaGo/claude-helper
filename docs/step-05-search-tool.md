@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Step 5: 검색 Skill"
-nav_order: 7
+nav_order: 5
 ---
 
 # Step 5: Grep 도구 사용하기

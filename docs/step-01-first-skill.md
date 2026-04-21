@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Step 1: 첫 번째 Skill"
-nav_order: 3
+nav_order: 1
 ---
 
 # Step 1: 첫 번째 Skill 만들기

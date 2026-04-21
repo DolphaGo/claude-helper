@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Step 6: 배포하기"
-nav_order: 8
+nav_order: 6
 ---
 
 # Step 6: 플러그인 배포하기
