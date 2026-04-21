@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "Step 7: 마켓플레이스"
+title: "Step 8: 마켓플레이스"
 nav_order: 8
 ---
 

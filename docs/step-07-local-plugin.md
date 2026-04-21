@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "Step 4: 로컬 플러그인 개발"
+title: "Step 7: 로컬 플러그인 개발"
 nav_order: 7
 ---
 
@@ -29,7 +29,7 @@ nav_order: 7
 
 ```
 ~/.claude/skills/
-└── my-skill.md
+└── my-SKILL.md
 ```
 
 - **단일 스킬 단위**
@@ -40,11 +40,13 @@ nav_order: 7
 
 ```
 my-plugin/
-└── .claude-plugin/
-    ├── plugin.json
-    └── skills/
-        ├── skill-a.md
-        └── skill-b.md
+├── .claude-plugin/
+│   └── plugin.json
+└── skills/
+    ├── skill-a/
+    │   └── SKILL.md
+    └── skill-b/
+        └── SKILL.md
 ```
 
 - **여러 스킬을 묶음**
@@ -70,12 +72,17 @@ Git 관련 스킬들을 하나의 플러그인으로:
 
 ```
 git-plugin/
-└── .claude-plugin/
-    └── skills/
-        ├── commit.md
-        ├── branch.md
-        ├── rebase.md
-        └── conflict.md
+├── .claude-plugin/
+│   └── plugin.json
+└── skills/
+    ├── commit/
+    │   └── SKILL.md
+    ├── branch/
+    │   └── SKILL.md
+    ├── rebase/
+    │   └── SKILL.md
+    └── conflict/
+        └── SKILL.md
 ```
 
 ### 3. 재사용성
@@ -90,10 +97,11 @@ git-plugin/
 
 ```
 my-plugin/
-└── .claude-plugin/
-    ├── plugin.json          # 플러그인 메타데이터
-    └── skills/              # 스킬 디렉토리
-        └── example.md       # 스킬 파일
+├── .claude-plugin/
+│   └── plugin.json          # 플러그인 메타데이터
+└── skills/                  # 스킬 디렉토리 (루트에 직접)
+    └── example/
+        └── SKILL.md         # 스킬 파일
 ```
 
 ### plugin.json 기본 구조
@@ -106,7 +114,7 @@ my-plugin/
   "skills": [
     {
       "name": "example",
-      "file": "skills/example.md",
+      "file": "skills/example/SKILL.md",
       "description": "Example skill"
     }
   ]
@@ -179,7 +187,8 @@ Claude가 변경사항을 즉시 반영합니다.
 ### Step 1: 디렉토리 생성
 
 ```bash
-mkdir -p ~/dev/my-first-plugin/.claude-plugin/skills
+mkdir -p ~/dev/my-first-plugin/.claude-plugin
+mkdir -p ~/dev/my-first-plugin/skills/hello
 cd ~/dev/my-first-plugin
 ```
 
@@ -196,7 +205,7 @@ cd ~/dev/my-first-plugin
   "skills": [
     {
       "name": "hello",
-      "file": "skills/hello.md",
+      "file": "skills/hello/SKILL.md",
       "description": "Say hello"
     }
   ]
@@ -205,7 +214,7 @@ cd ~/dev/my-first-plugin
 
 ### Step 3: 스킬 파일 작성
 
-`.claude-plugin/skills/hello.md`:
+`skills/hello/SKILL.md`:
 
 ```markdown
 ---
@@ -278,12 +287,15 @@ Git 관련 작업을 자동화하는 플러그인을 만들어봅시다.
 
 ```
 git-helper/
-└── .claude-plugin/
-    ├── plugin.json
-    └── skills/
-        ├── smart-commit.md
-        ├── cleanup-branches.md
-        └── sync.md
+├── .claude-plugin/
+│   └── plugin.json
+└── skills/
+    ├── smart-commit/
+    │   └── SKILL.md
+    ├── cleanup-branches/
+    │   └── SKILL.md
+    └── sync/
+        └── SKILL.md
 ```
 
 #### plugin.json
@@ -297,17 +309,17 @@ git-helper/
   "skills": [
     {
       "name": "smart-commit",
-      "file": "skills/smart-commit.md",
+      "file": "skills/smart-commit/SKILL.md",
       "description": "Create smart commit messages"
     },
     {
       "name": "cleanup-branches",
-      "file": "skills/cleanup-branches.md",
+      "file": "skills/cleanup-branches/SKILL.md",
       "description": "Clean up merged branches"
     },
     {
       "name": "sync",
-      "file": "skills/sync.md",
+      "file": "skills/sync/SKILL.md",
       "description": "Sync with remote"
     }
   ]
@@ -451,7 +463,7 @@ claude code --plugin-dir ~/dev/git-helper
 claude code --plugin-dir ~/dev/my-plugin
 
 # 터미널 2: 파일 편집
-vim ~/dev/my-plugin/.claude-plugin/skills/my-skill.md
+vim ~/dev/my-plugin/skills/my-skill/SKILL.md
 
 # 터미널 1 (Claude Code 내에서)
 /reload-plugins
@@ -516,18 +528,30 @@ claude code --plugin-dir ~/dev/my-plugin-v2
 
 ```
 git-helper/
-├── commit.md
-├── branch.md
-└── merge.md
+├── .claude-plugin/
+│   └── plugin.json
+└── skills/
+    ├── commit/
+    │   └── SKILL.md
+    ├── branch/
+    │   └── SKILL.md
+    └── merge/
+        └── SKILL.md
 ```
 
 **나쁜 예:**
 
 ```
 my-tools/
-├── commit.md
-├── database.md        # Git과 관련 없음
-└── send-email.md      # Git과 관련 없음
+├── .claude-plugin/
+│   └── plugin.json
+└── skills/
+    ├── commit/
+    │   └── SKILL.md
+    ├── database/        # Git과 관련 없음
+    │   └── SKILL.md
+    └── send-email/      # Git과 관련 없음
+        └── SKILL.md
 ```
 
 ### 3. 일관된 trigger_patterns
@@ -575,7 +599,8 @@ trigger_patterns:
 
 ```bash
 # 1. 플러그인 생성
-mkdir -p ~/dev/my-plugin/.claude-plugin/skills
+mkdir -p ~/dev/my-plugin/.claude-plugin
+mkdir -p ~/dev/my-plugin/skills/skill-name
 
 # 2. plugin.json 작성
 # 3. 스킬 파일 작성
