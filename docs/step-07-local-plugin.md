@@ -4,7 +4,7 @@ title: "Step 7: 로컬 플러그인 개발"
 nav_order: 7
 ---
 
-# Step 4: 로컬 플러그인 개발
+# Step 7: 로컬 플러그인 개발
 {: .no_toc }
 
 ## 목차
@@ -29,7 +29,8 @@ nav_order: 7
 
 ```
 ~/.claude/skills/
-└── my-SKILL.md
+└── my-skill/
+    └── SKILL.md
 ```
 
 - **단일 스킬 단위**
@@ -97,11 +98,11 @@ git-plugin/
 
 ```
 my-plugin/
-├── .claude-plugin/
+├── .claude-plugin/          # 조건부 선택적: 기본 위치 사용 시 생략 가능
 │   └── plugin.json          # 플러그인 메타데이터
 └── skills/                  # 스킬 디렉토리 (루트에 직접)
     └── example/
-        └── SKILL.md         # 스킬 파일
+        └── SKILL.md         # 스킬 파일 (대문자)
 ```
 
 ### plugin.json 기본 구조
@@ -128,9 +129,9 @@ my-plugin/
 ### 중요: ~/.claude/plugins/는 캐시 디렉토리
 
 **주의사항:**
-- `~/.claude/plugins/`는 설치된 플러그인의 **캐시**입니다
-- 여기에 직접 파일을 만들면 **삭제될 수 있습니다**
-- 로컬 개발은 **원하는 디렉토리**에서 하세요
+- `~/.claude/plugins/`는 마켓플레이스에서 설치된 플러그인의 **캐시**입니다
+- 여기에 직접 파일을 만들거나 수정하면 **삭제되거나 덮어쓰기될 수 있습니다**
+- 로컬 개발은 `~/.claude/plugins/` 외부의 **원하는 디렉토리**에서 하세요
 
 ### 1. 플러그인 생성 위치
 
@@ -152,13 +153,13 @@ my-plugin/
 `--plugin-dir` 플래그를 사용하여 세션마다 로드합니다:
 
 ```bash
-claude code --plugin-dir ~/projects/my-plugin
+claude --plugin-dir ~/projects/my-plugin
 ```
 
 **여러 플러그인 동시 로드:**
 
 ```bash
-claude code \
+claude \
   --plugin-dir ~/projects/plugin-a \
   --plugin-dir ~/projects/plugin-b \
   --plugin-dir ~/Desktop/test-plugin
@@ -167,7 +168,7 @@ claude code \
 ### 3. 세션 전용
 
 - `--plugin-dir`로 로드한 플러그인은 **현재 세션**에만 적용됩니다
-- Claude Code를 종료하면 다시 로드해야 합니다
+- Claude를 종료하면 다시 로드해야 합니다
 - 영구적으로 사용하려면 나중에 마켓플레이스를 통해 설치합니다
 
 ### 4. 개발 중 리로드
@@ -239,8 +240,8 @@ Greet the user in a friendly way.
 ### Step 4: 플러그인 테스트
 
 ```bash
-# Claude Code 실행 (플러그인 로드)
-claude code --plugin-dir ~/dev/my-first-plugin
+# Claude 실행 (플러그인 로드)
+claude --plugin-dir ~/dev/my-first-plugin
 
 # 세션 내에서 테스트
 /my-first:hello
@@ -439,7 +440,7 @@ Safely sync local and remote branches.
 
 ```bash
 # 플러그인 로드
-claude code --plugin-dir ~/dev/git-helper
+claude --plugin-dir ~/dev/git-helper
 
 # 스킬 사용
 /git-helper:smart-commit
@@ -459,13 +460,13 @@ claude code --plugin-dir ~/dev/git-helper
 ### 1. 빠른 반복 개발
 
 ```bash
-# 터미널 1: Claude Code 실행
-claude code --plugin-dir ~/dev/my-plugin
+# 터미널 1: Claude 실행
+claude --plugin-dir ~/dev/my-plugin
 
 # 터미널 2: 파일 편집
 vim ~/dev/my-plugin/skills/my-skill/SKILL.md
 
-# 터미널 1 (Claude Code 내에서)
+# 터미널 1 (Claude 세션 내에서)
 /reload-plugins
 /my-plugin:my-skill  # 테스트
 ```
@@ -501,7 +502,7 @@ git commit -m "Initial plugin version"
 cp -r ~/dev/my-plugin ~/dev/my-plugin-v2
 
 # 수정 후 다른 버전 테스트
-claude code --plugin-dir ~/dev/my-plugin-v2
+claude --plugin-dir ~/dev/my-plugin-v2
 ```
 
 ---
@@ -606,7 +607,7 @@ mkdir -p ~/dev/my-plugin/skills/skill-name
 # 3. 스킬 파일 작성
 
 # 4. 테스트
-claude code --plugin-dir ~/dev/my-plugin
+claude --plugin-dir ~/dev/my-plugin
 
 # 5. 수정 후 리로드
 /reload-plugins

@@ -38,13 +38,14 @@ nav_order: 2
 ### 디렉토리 생성
 
 ```bash
-mkdir -p ~/.claude/plugins/my-first-plugin/skills/gs
+# 개발 디렉토리에 플러그인 생성
+mkdir -p ~/my-plugins/my-first-plugin/skills/gs
 ```
 
 ### SKILL.md 생성
 
 ```bash
-cat > ~/.claude/plugins/my-first-plugin/skills/gs/SKILL.md << 'SKILLEOF'
+cat > ~/my-plugins/my-first-plugin/skills/gs/SKILL.md << 'SKILLEOF'
 ---
 description: Git 상태를 확인합니다
 ---
@@ -59,7 +60,10 @@ SKILLEOF
 ### 테스트
 
 ```bash
-/reload-plugins
+# Claude 실행 시 플러그인 디렉토리 지정
+claude --plugin-dir ~/my-plugins/my-first-plugin
+
+# Skill 호출
 /my-first-plugin:gs
 ```
 
@@ -72,7 +76,7 @@ Claude가 자동으로 `git branch --show-current`와 `git status` 명령어를 
 Claude가 출력 형식을 알 수 있도록 지침을 추가합니다.
 
 ```bash
-cat > ~/.claude/plugins/my-first-plugin/skills/gs/SKILL.md << 'SKILLEOF'
+cat > ~/my-plugins/my-first-plugin/skills/gs/SKILL.md << 'SKILLEOF'
 ---
 description: Git 상태를 한눈에 보여줍니다
 ---
@@ -98,7 +102,10 @@ SKILLEOF
 ### 테스트
 
 ```bash
-/reload-plugins
+# 변경사항 적용
+claude --plugin-dir ~/my-plugins/my-first-plugin
+
+# Skill 호출
 /my-first-plugin:gs
 ```
 
@@ -135,7 +142,7 @@ Untracked:
 Git 저장소가 아닌 곳에서 실행하면 에러가 발생합니다. 사전 확인을 추가합니다.
 
 ```bash
-cat > ~/.claude/plugins/my-first-plugin/skills/gs/SKILL.md << 'SKILLEOF'
+cat > ~/my-plugins/my-first-plugin/skills/gs/SKILL.md << 'SKILLEOF'
 ---
 description: Git 상태를 확인합니다. Git 저장소에서만 사용하세요.
 ---

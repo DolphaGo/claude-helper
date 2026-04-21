@@ -76,13 +76,14 @@ Claude가 마음대로 실행하면 안 되는 작업들입니다.
 ### 디렉토리 생성
 
 ```bash
-mkdir -p ~/.claude/plugins/my-first-plugin/skills/commit
+# 개발 디렉토리에 skill 생성
+mkdir -p ~/my-plugins/my-first-plugin/skills/commit
 ```
 
 ### SKILL.md 생성
 
 ```bash
-cat > ~/.claude/plugins/my-first-plugin/skills/commit/SKILL.md << 'SKILLEOF'
+cat > ~/my-plugins/my-first-plugin/skills/commit/SKILL.md << 'SKILLEOF'
 ---
 description: Git commit을 생성합니다
 disable-model-invocation: true
@@ -129,11 +130,12 @@ git add test.txt
 ### 변경사항 적용 및 실행
 
 ```bash
-/reload-plugins
+# Claude 실행 시 플러그인 디렉토리 지정
+claude --plugin-dir ~/my-plugins/my-first-plugin
+
+# Skill 호출
 /my-first-plugin:commit
 ```
-
-`/reload-plugins` 명령어는 플러그인을 다시 로드합니다.
 
 Claude가:
 1. Staged 파일 확인
@@ -148,7 +150,7 @@ Claude가:
 더 빠른 버전을 만들어봅시다.
 
 ```bash
-cat > ~/.claude/plugins/my-first-plugin/skills/qc/SKILL.md << 'SKILLEOF'
+cat > ~/my-plugins/my-first-plugin/skills/qc/SKILL.md << 'SKILLEOF'
 ---
 description: 빠른 Git commit
 disable-model-invocation: true
@@ -175,7 +177,7 @@ SKILLEOF
 **디렉토리를 먼저 만들어야 합니다:**
 
 ```bash
-mkdir -p ~/.claude/plugins/my-first-plugin/skills/qc
+mkdir -p ~/my-plugins/my-first-plugin/skills/qc
 ```
 
 ---
@@ -185,7 +187,7 @@ mkdir -p ~/.claude/plugins/my-first-plugin/skills/qc
 사용자가 커밋 메시지를 직접 지정할 수 있게 합니다.
 
 ```bash
-cat > ~/.claude/plugins/my-first-plugin/skills/qc/SKILL.md << 'SKILLEOF'
+cat > ~/my-plugins/my-first-plugin/skills/qc/SKILL.md << 'SKILLEOF'
 ---
 description: 빠른 Git commit (메시지 지정 가능)
 disable-model-invocation: true

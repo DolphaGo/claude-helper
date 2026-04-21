@@ -60,8 +60,8 @@ Grep은 프로젝트 전체에서 키워드를 찾는 도구입니다.
 ### Skill 생성
 
 ```bash
-mkdir -p ~/.claude/plugins/my-first-plugin/skills/search
-cat > ~/.claude/plugins/my-first-plugin/skills/search/SKILL.md << 'SKILLEOF'
+mkdir -p ~/my-plugins/my-first-plugin/skills/search
+cat > ~/my-plugins/my-first-plugin/skills/search/SKILL.md << 'SKILLEOF'
 ---
 description: 프로젝트에서 키워드를 검색합니다
 disable-model-invocation: true
@@ -86,7 +86,10 @@ SKILLEOF
 ### 테스트
 
 ```bash
-/reload-plugins
+# Claude 실행 시 플러그인 디렉토리 지정
+claude --plugin-dir ~/my-plugins/my-first-plugin
+
+# Skill 호출
 /my-first-plugin:search "TODO"
 ```
 
@@ -99,7 +102,7 @@ Claude가 자동으로 Grep 도구를 사용해서 TODO를 검색합니다.
 검색 결과를 더 보기 좋게 정리합니다.
 
 ```bash
-cat > ~/.claude/plugins/my-first-plugin/skills/search/SKILL.md << 'SKILLEOF'
+cat > ~/my-plugins/my-first-plugin/skills/search/SKILL.md << 'SKILLEOF'
 ---
 description: 프로젝트에서 키워드를 검색하고 정리해서 보여줍니다
 disable-model-invocation: true
@@ -137,7 +140,10 @@ SKILLEOF
 ### 테스트
 
 ```bash
-/reload-plugins
+# 변경사항 적용
+claude --plugin-dir ~/my-plugins/my-first-plugin
+
+# Skill 호출
 /my-first-plugin:search "function"
 ```
 

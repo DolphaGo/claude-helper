@@ -4,7 +4,7 @@ title: "Step 8: 마켓플레이스"
 nav_order: 8
 ---
 
-# Step 7: 마켓플레이스 등록과 배포
+# Step 8: 마켓플레이스 등록과 배포
 {: .no_toc }
 
 ⏱️ 20분
@@ -38,13 +38,18 @@ nav_order: 8
 ### 로컬 플러그인 (Step 6에서 배운 것)
 
 ```bash
-cd ~/.claude/plugins
+# 개발 디렉토리에 clone
+mkdir -p ~/my-plugins
+cd ~/my-plugins
 git clone https://github.com/username/my-first-plugin.git
+
+# 사용
+claude --plugin-dir ~/my-plugins/my-first-plugin
 ```
 
 **특징:**
 - ✅ 간단한 공유
-- ❌ 수동 설치 필요
+- ❌ 매번 --plugin-dir 지정 필요
 - ❌ 업데이트 관리 어려움
 - ❌ 삭제하면 완전히 사라짐
 
@@ -72,7 +77,7 @@ claude plugin install my-first-plugin
 
 ```bash
 # 실수로 삭제
-rm -rf ~/.claude/plugins/my-first-plugin
+rm -rf ~/my-plugins/my-first-plugin
 
 # 다시 설치해야 함
 git clone https://github.com/...
@@ -191,7 +196,7 @@ mkdir -p plugins/my-first-plugin
 
 ```bash
 # 기존 플러그인 복사
-cp -r ~/.claude/plugins/my-first-plugin/* plugins/my-first-plugin/
+cp -r ~/my-plugins/my-first-plugin/* plugins/my-first-plugin/
 
 # 또는 새로 만들기
 mkdir -p plugins/my-first-plugin/.claude-plugin
@@ -222,7 +227,7 @@ git push
 ```
 
 {: .important }
-> **자동 등록:** 마켓플레이스에 플러그인을 추가하면 `marketplace.json`의 `plugins` 배열이 자동으로 업데이트됩니다. 수동으로 편집할 필요가 없습니다.
+> **수동 관리:** 마켓플레이스에 플러그인을 추가한 후에는 `marketplace.json`의 `plugins` 배열을 수동으로 업데이트해야 합니다. 플러그인이 자동으로 등록되지 않으므로, 각 플러그인의 정보를 직접 추가하세요.
 
 ---
 
@@ -479,12 +484,14 @@ claude plugin install jira-integration
 ### 설치 위치 비교
 
 ```
-# 로컬 플러그인 (수동 관리)
-~/.claude/plugins/my-local-plugin/
+# 로컬 개발 플러그인 (수동 관리)
+~/my-plugins/my-local-plugin/
 
 # 마켓플레이스 플러그인 (자동 관리)
 ~/.claude/plugins/cache/my-marketplace-plugin/
 ```
+
+**중요:** `~/.claude/plugins/`는 캐시 디렉토리입니다. 직접 생성하거나 수정하지 마세요.
 
 ---
 
@@ -494,10 +501,11 @@ claude plugin install jira-integration
 
 ```bash
 # 1. 로컬에서 개발
-mkdir ~/.claude/plugins/new-plugin
+mkdir -p ~/my-plugins/new-plugin
 # ... 개발 ...
 
 # 2. 테스트
+claude --plugin-dir ~/my-plugins/new-plugin
 /new-plugin:test
 ```
 
@@ -506,7 +514,7 @@ mkdir ~/.claude/plugins/new-plugin
 ```bash
 # 3. 마켓플레이스에 추가
 cd my-marketplace
-cp -r ~/.claude/plugins/new-plugin plugins/
+cp -r ~/my-plugins/new-plugin plugins/
 git add .
 git commit -m "feat: add new-plugin v1.0.0"
 git push

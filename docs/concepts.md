@@ -52,31 +52,46 @@ Skills를 저장하는 위치에 따라 누가 사용할 수 있는지가 결정
 | **Enterprise** | 관리 설정 참조 | 조직의 모든 사용자 | 1 (최고) | `/skill-name` |
 | **Personal** | `~/.claude/skills/<skill-name>/SKILL.md` | 모든 프로젝트 | 2 | `/skill-name` |
 | **Project** | `.claude/skills/<skill-name>/SKILL.md` | 이 프로젝트만 | 3 | `/skill-name` |
-| **Plugin (자동)** | `~/.claude/plugins/cache/.../skills/<skill-name>/SKILL.md` | 설치된 플러그인 | 4 | `/plugin-name:skill-name` |
-| **Plugin (세션)** | 아무 곳 + `--plugin-dir` | 명시적 로드 | - | `/plugin-name:skill-name` |
+| **Plugin (캐시)** | `~/.claude/plugins/cache/...` | 설치된 플러그인 | 4 | `/plugin-name:skill-name` |
+| **Plugin (개발)** | 개발 디렉토리 + `--plugin-dir` | 명시적 로드 | - | `/plugin-name:skill-name` |
 
 ### 플러그인 위치 명확화
 
-**설치된 플러그인 (자동):**
+**경고: 플러그인 디렉토리를 직접 만들지 마세요**
+{: .label .label-red }
+
+`~/.claude/plugins/` 디렉토리는 Claude Code가 자동으로 관리하는 캐시입니다. 이 디렉토리를 직접 생성하거나 수정하면 예상치 못한 문제가 발생할 수 있습니다.
+
+**설치된 플러그인 (캐시):**
 ```
 ~/.claude/plugins/cache/<plugin-name>/skills/
 ```
-- Claude Code가 자동으로 관리하는 캐시
-- 사용자가 직접 생성하거나 수정하지 않음
-- 플러그인 설치 시 자동으로 이 위치에 캐시됨
+- Claude Code가 자동으로 관리
+- 플러그인 설치 시 자동으로 캐시됨
+- **사용자가 직접 생성하거나 수정하면 안 됨**
 
-**로컬 개발 플러그인 (세션):**
+**플러그인 개발 (권장 방법):**
 ```bash
-# 개발 중인 플러그인을 임시로 로드
-claude --plugin-dir /path/to/my-plugin-dev
-```
-- 개발 중에만 사용
-- 세션이 끝나면 사라짐
-- 로컬 테스트 용도
+# 1. 별도의 개발 디렉토리에 플러그인 생성
+mkdir -p ~/my-plugins/my-plugin/skills/hello
 
-**주의:**
-- `~/.claude/plugins/` 디렉토리를 직접 만들거나 수정하지 마세요
-- 플러그인 개발 시에는 `--plugin-dir` 플래그를 사용하세요
+# 2. Claude 실행 시 --plugin-dir 플래그 사용
+claude --plugin-dir ~/my-plugins/my-plugin
+
+# 3. Skill 호출
+/my-plugin:hello
+```
+
+**개발 플러그인 특징:**
+- 별도의 디렉토리에서 개발 (예: `~/my-plugins/`, `~/dev/plugins/`)
+- `--plugin-dir` 플래그로 세션에 로드
+- 로컬 테스트 및 개발 용도
+- Git으로 버전 관리 가능
+
+**핵심 원칙:**
+- `~/.claude/plugins/`는 읽기 전용 캐시
+- 플러그인 개발은 별도 디렉토리에서
+- `--plugin-dir`로 개발 플러그인 로드
 
 ### 우선순위 다이어그램
 
@@ -152,8 +167,8 @@ claude --plugin-dir /path/to/my-plugin-dev
 **시나리오 2: 플러그인 개발**
 
 ```bash
-# 개발 디렉토리 구조
-/Users/myname/dev/my-plugin/
+# 개발 디렉토리 구조 (별도 위치)
+~/my-plugins/my-plugin/
 ├── .claude-plugin/
 │   └── plugin.json
 └── skills/
@@ -162,11 +177,13 @@ claude --plugin-dir /path/to/my-plugin-dev
 
 # 테스트
 cd /any/project
-claude --plugin-dir /Users/myname/dev/my-plugin
+claude --plugin-dir ~/my-plugins/my-plugin
 
 # 호출
 /my-plugin:test
 ```
+
+**중요:** 플러그인 개발 시 `~/.claude/plugins/` 디렉토리를 사용하지 마세요. 별도의 개발 디렉토리 (예: `~/my-plugins/`, `~/dev/plugins/`)를 만들어 사용하세요.
 
 **사용 권장:**
 - **Personal**: 개인 워크플로우, 반복 작업
@@ -323,7 +340,8 @@ description: 코드를 설명합니다
 ### Plugin 구조
 
 ```
-~/.claude/plugins/my-plugin/
+# 개발 디렉토리 (예: ~/my-plugins/)
+my-plugin/
 ├── .claude-plugin/
 │   └── plugin.json        (필수 - 메타데이터)
 └── skills/
@@ -331,6 +349,11 @@ description: 코드를 설명합니다
     │   └── SKILL.md
     └── skill-two/
         └── SKILL.md
+```
+
+**사용 방법:**
+```bash
+claude --plugin-dir ~/my-plugins/my-plugin
 ```
 
 ### plugin.json
@@ -384,10 +407,13 @@ description: 코드를 설명합니다
 ### Plugin Skills
 
 ```bash
-# 위치
-~/.claude/plugins/my-plugin/skills/hello/SKILL.md
+# 위치 (캐시된 플러그인)
+~/.claude/plugins/cache/my-plugin/skills/hello/SKILL.md
 
-# 호출
+# 위치 (개발 중 플러그인)
+~/my-plugins/my-plugin/skills/hello/SKILL.md
+
+# 호출 (둘 다 동일)
 /my-plugin:hello
 ```
 
@@ -396,6 +422,13 @@ description: 코드를 설명합니다
 - Git으로 쉽게 공유
 - 버전 관리
 - 팀 협업 용이
+
+**개발 방법:**
+```bash
+# 플러그인 개발은 별도 디렉토리에서
+mkdir -p ~/my-plugins/my-plugin/skills/hello
+claude --plugin-dir ~/my-plugins/my-plugin
+```
 
 ### 네임스페이스 규칙
 
@@ -421,18 +454,22 @@ description: 코드를 설명합니다
 **가장 일반적인 방법:**
 
 ```bash
-# 사용자가 설치
-cd ~/.claude/plugins
-git clone https://github.com/username/my-plugin.git
+# 공식 플러그인 설치 (Claude Code가 자동으로 캐시 관리)
+# 향후 지원될 예정: claude plugin install <plugin-url>
 
-# Claude 재시작
-claude
+# 현재는 개발자 모드로 사용
+git clone https://github.com/username/my-plugin.git ~/my-plugins/my-plugin
+claude --plugin-dir ~/my-plugins/my-plugin
 ```
 
 **장점:**
 - 버전 관리
 - 쉬운 업데이트 (`git pull`)
 - 협업 가능
+
+**주의:**
+- `~/.claude/plugins/`에 직접 clone하지 마세요
+- 별도 디렉토리에 clone하고 `--plugin-dir` 사용
 
 ### 2. 직접 배포
 
@@ -442,9 +479,13 @@ claude
 # 압축
 tar -czf my-plugin.tar.gz my-plugin/
 
-# 사용자가 압축 해제
-cd ~/.claude/plugins
+# 사용자가 압축 해제 (별도 디렉토리)
+mkdir -p ~/my-plugins
+cd ~/my-plugins
 tar -xzf my-plugin.tar.gz
+
+# 사용
+claude --plugin-dir ~/my-plugins/my-plugin
 ```
 
 ### 3. 조직 배포

@@ -34,7 +34,7 @@ nav_order: 6
 ### 1. Git 초기화
 
 ```bash
-cd ~/.claude/plugins/my-first-plugin
+cd ~/my-plugins/my-first-plugin
 
 git init
 ```
@@ -60,11 +60,17 @@ Claude Code 플러그인입니다.
 ## 설치
 
 ```bash
-cd ~/.claude/plugins
+# 개발 디렉토리에 clone
+mkdir -p ~/my-plugins
+cd ~/my-plugins
 git clone https://github.com/username/my-first-plugin.git
 ```
 
-Claude 재시작 후 사용 가능합니다.
+Claude 실행 시 `--plugin-dir` 플래그 사용:
+
+```bash
+claude --plugin-dir ~/my-plugins/my-first-plugin
+```
 
 ## 포함된 Skills
 
@@ -97,20 +103,19 @@ git push -u origin main
 팀원들에게 다음 명령어를 공유하세요:
 
 ```bash
-cd ~/.claude/plugins
+# 개발 디렉토리에 clone
+mkdir -p ~/my-plugins
+cd ~/my-plugins
 git clone https://github.com/username/my-first-plugin.git
-```
-
-그리고 Claude 재시작:
-
-```bash
-# Ctrl+D 후
-claude
 ```
 
 ### 사용 방법
 
 ```bash
+# Claude 실행 시 플러그인 로드
+claude --plugin-dir ~/my-plugins/my-first-plugin
+
+# Skill 호출
 /my-first-plugin:hello
 /my-first-plugin:gs
 ```
@@ -122,11 +127,11 @@ claude
 ### 플러그인 업데이트
 
 ```bash
-cd ~/.claude/plugins/my-first-plugin
+cd ~/my-plugins/my-first-plugin
 git pull
 ```
 
-Claude 재시작 후 적용됩니다.
+다음 Claude 실행 시 자동으로 적용됩니다.
 
 ---
 

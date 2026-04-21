@@ -92,9 +92,10 @@ echo $API_URL
 테스트용으로 간단한 공개 API를 사용합니다. (JSONPlaceholder - 무료 테스트 API)
 
 ```bash
-mkdir -p ~/.claude/plugins/my-first-plugin/skills/api-test
-cat > ~/.claude/plugins/my-first-plugin/skills/api-test/SKILL.md << 'SKILLEOF'
+mkdir -p ~/my-plugins/my-first-plugin/skills/api-test
+cat > ~/my-plugins/my-first-plugin/skills/api-test/SKILL.md << 'SKILLEOF'
 ---
+name: api-test
 description: 간단한 API 테스트
 disable-model-invocation: true
 ---
@@ -115,7 +116,10 @@ SKILLEOF
 ### 테스트
 
 ```bash
-/reload-plugins
+# Claude 실행 시 플러그인 디렉토리 지정
+claude --plugin-dir ~/my-plugins/my-first-plugin
+
+# Skill 호출
 /my-first-plugin:api-test
 ```
 
@@ -149,8 +153,9 @@ echo $MY_API_TOKEN
 ### Skill 생성
 
 ```bash
-cat > ~/.claude/plugins/my-first-plugin/skills/api-test/SKILL.md << 'SKILLEOF'
+cat > ~/my-plugins/my-first-plugin/skills/api-test/SKILL.md << 'SKILLEOF'
 ---
+name: api-test
 description: 환경 변수를 사용한 API 테스트
 disable-model-invocation: true
 ---
