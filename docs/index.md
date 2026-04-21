@@ -14,7 +14,7 @@ nav_order: 1
 이런 의문이 들지 않도록, 파일 하나하나 만들면서 내부 동작까지 이해합니다.
 {: .fs-5 .fw-300 }
 
-[지금 바로 시작하기 →](step-01-understanding){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 }
+[지금 바로 시작하기 →](step-00-before-start){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 }
 
 ---
 

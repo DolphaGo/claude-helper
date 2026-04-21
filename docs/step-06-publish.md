@@ -78,19 +78,19 @@ git submodule add https://github.com/username/my-claude-plugin.git
 
 ### README 작성
 
-```markdown
+````markdown
 # My First Plugin
 
 Claude Code 플러그인입니다.
 
 ## 📦 설치
 
-\`\`\`bash
+```bash
 cd ~/.claude/plugins
 git clone https://github.com/username/my-claude-plugin.git
 
 # Claude Code 재시작
-\`\`\`
+```
 
 ## 📚 포함된 기능
 
@@ -108,12 +108,12 @@ git clone https://github.com/username/my-claude-plugin.git
 
 환경 변수 설정이 필요합니다:
 
-\`\`\`bash
+```bash
 # ~/.bashrc 또는 ~/.zshrc에 추가
 export JIRA_URL="https://your-company.atlassian.net"
 export JIRA_EMAIL="your@email.com"
 export JIRA_TOKEN="your-token"
-\`\`\`
+```
 
 ## 📖 사용법
 
@@ -126,7 +126,7 @@ Pull Request 환영합니다!
 ## 📄 라이선스
 
 MIT
-```
+````
 
 ---
 
@@ -323,9 +323,9 @@ git push --tags
 
 ## 사용법
 
-\`\`\`
+```
 /gs
-\`\`\`
+```
 
 ## 기능
 
@@ -336,13 +336,13 @@ git push --tags
 
 ## 예시
 
-\`\`\`
+```
 You: /gs
 
 🌿 브랜치: main
 📊 Staged: 2개
 ...
-\`\`\`
+```
 
 ## 옵션
 

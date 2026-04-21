@@ -129,15 +129,16 @@ my-plugin/
 
 ```bash
 # Skill/Command 파일
-✅ hello.md              # 소문자, 하이픈 가능
-✅ git-status.md
+✅ hello.md              # 소문자 (권장)
+✅ git-status.md         # 하이픈 가능
 ✅ code_review.md        # 언더스코어 가능
-❌ Hello.md              # 대문자 시작 안 됨
+✅ Hello.md              # 대문자도 가능 (단, 소문자 권장)
 ❌ git status.md         # 공백 안 됨
 ```
 
-**왜?**  
-Claude Code가 파일명에서 자동으로 이름을 추출하기 때문입니다.
+**권장 사항:**  
+- 소문자 사용을 권장합니다 (타이핑 편리, 일반적인 관례)
+- 중요한 것은 frontmatter의 `name` 필드입니다
 
 ---
 
