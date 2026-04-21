@@ -31,33 +31,40 @@ bundle exec jekyll serve
 각 단계는 **하나의 핵심 개념**에 집중합니다.
 
 **Step 1: 첫 번째 Skill (10분)**
+- 개인 Skill 만들기 (`~/.claude/skills/`)
 - Skill 파일 구조 (`skills/<name>/SKILL.md`)
-- plugin.json 작성
-- 네임스페이스 이해
+- Frontmatter와 description 작성
+- 첫 번째 Skill 실행
 
-**Step 2: 명령어 실행 (10분)**
+**Step 2: Git Skill (10분)**
+- Git 명령어를 실행하는 Skill
 - Claude에게 명령어 실행 지침 작성
 - 출력 형식 지정
 - 에러 처리 (사전 확인)
 
 **Step 3: 수동 Skill (10분)**
 - `disable-model-invocation` 사용
-- 사용자만 실행 가능한 skill
+- 사용자만 실행 가능한 Skill
 - 위험한 작업 제어
+- 수동 실행 패턴
 
-**Step 4: 환경 변수 (15분)**
+**Step 4: 환경 변수와 API (15분)**
 - 환경 변수가 필요한 이유
 - 환경 변수 설정 방법
 - API 호출 기본
+- 토큰 안전하게 관리하기
 
-**Step 5: 도구 활용 (10분)**
-- Claude Code의 내장 도구
+**Step 5: 검색 Skill (10분)**
+- Claude Code의 내장 도구 이해
 - Grep 도구 사용
 - 도구 사용 지침 작성
+- 검색 결과 포맷팅
 
-**Step 6: 배포 (10분)**
-- Git 저장소 공유
+**Step 6: 플러그인 배포 (10분)**
+- Git 저장소로 공유
+- plugin.json 작성
 - 팀원 설치 가이드
+- 업데이트 방법
 
 ### 고급 개념
 복잡한 통합과 자동화를 위한 고급 기능들:
@@ -111,10 +118,13 @@ cd ~/.claude/plugins
 git clone https://github.com/DolphaGo/claude-helper.git
 ```
 
-Claude 재시작:
+변경사항 적용:
 
 ```bash
-# Ctrl+D 후
+# Claude 내에서
+/reload-plugins
+
+# 또는 재시작 (Ctrl+D 후)
 claude
 ```
 
@@ -128,12 +138,13 @@ claude-helper/
 │   └── examples/         # 예제 skills
 ├── templates/            # Skill 템플릿
 └── docs/                 # Jekyll 문서
-    ├── step-01-first-skill.md
-    ├── step-02-git-skill.md
-    ├── step-03-command.md
-    ├── step-04-jira-skill.md
-    ├── step-05-search-tool.md
-    └── step-06-publish.md
+    ├── step-00-before-start.md    # 시작하기 전에
+    ├── step-01-first-skill.md     # 첫 번째 Skill
+    ├── step-02-git-skill.md       # Git Skill
+    ├── step-03-command.md         # 수동 Skill
+    ├── step-04-jira-skill.md      # 환경 변수와 API
+    ├── step-05-search-tool.md     # 검색 Skill
+    └── step-06-publish.md         # 플러그인 배포
 ```
 
 ## 🚀 빠른 시작
@@ -155,7 +166,7 @@ cp templates/skill-template.md skills/my-skill/SKILL.md
 # 편집
 vim skills/my-skill/SKILL.md
 
-# 재시작 또는 reload
+# 변경사항 적용
 /reload-plugins
 ```
 

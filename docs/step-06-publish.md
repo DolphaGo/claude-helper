@@ -199,9 +199,12 @@ rm -rf temp
 - ✅ 팀원 설치 가이드
 - ✅ 업데이트 방법
 
-### 축하합니다!
+### 다음 단계
 
-전체 과정을 완료했습니다.
+팀 전체가 쉽게 설치하고 관리할 수 있는 마켓플레이스를 배워보세요!
+
+[Step 7: 마켓플레이스 →](step-07-marketplace)
+{: .btn .btn-primary }
 
 [처음으로 돌아가기 →](../)
-{: .btn .btn-primary }
+{: .btn .btn-outline }

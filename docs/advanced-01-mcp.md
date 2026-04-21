@@ -88,12 +88,12 @@ Claude: 결과를 분석하고 요약
 
 ### 2단계: 설정 파일 작성
 
-MCP 서버는 `~/.claude/mcp/mcp.json`에서 설정합니다.
+MCP 서버는 `~/.claude.json` 또는 프로젝트의 `.mcp.json`에서 설정합니다.
 
 **예: Filesystem MCP 서버**
 
 ```bash
-cat > ~/.claude/mcp/mcp.json << 'EOF'
+cat > ~/.claude.json << 'EOF'
 {
   "mcpServers": {
     "filesystem": {
@@ -125,7 +125,13 @@ claude
 
 ```bash
 # Claude Code에서
-/mcp list
+/mcp
+```
+
+또는 터미널에서:
+
+```bash
+claude mcp list
 ```
 
 연결된 MCP 서버 목록이 표시됩니다.
@@ -227,14 +233,20 @@ SKILLEOF
 
 ### MCP의 3가지 구성 요소
 
-1. **Resources**: 외부 데이터에 접근 (파일, DB 레코드)
-2. **Tools**: 작업 수행 (파일 생성, API 호출)
-3. **Prompts**: 재사용 가능한 프롬프트 템플릿
+1. **Resources**: 외부 데이터 소스를 Claude에게 노출 (파일, DB 레코드, API 응답)
+2. **Tools**: Claude가 호출할 수 있는 함수들을 제공 (파일 작성, API 호출, 데이터 수정)
+3. **Prompts**: 템플릿화된 프롬프트와 워크플로우를 제공하여 일관된 상호작용 지원
 
 ### 설정 파일 위치
 
+**전역 설정 (모든 프로젝트에 적용):**
 ```
-~/.claude/mcp/mcp.json
+~/.claude.json
+```
+
+**프로젝트별 설정:**
+```
+.mcp.json
 ```
 
 ### 기본 구조
@@ -258,6 +270,14 @@ SKILLEOF
 {
   "args": ["--token", "${TOKEN_NAME}"]
 }
+```
+
+### 프로젝트별 서버 설정
+
+특정 프로젝트에만 MCP 서버를 연결하려면 `--scope` 플래그 사용:
+
+```bash
+claude mcp install <server-name> --scope project
 ```
 
 ---
@@ -345,8 +365,9 @@ MCP 서버를 연결하는 방법을 배웠습니다!
 
 **핵심 개념:**
 - MCP는 Claude Code와 외부 시스템을 연결하는 표준 프로토콜
-- 설정 파일 `~/.claude/mcp/mcp.json`에서 관리
+- 전역 설정: `~/.claude.json`, 프로젝트별 설정: `.mcp.json`
 - 토큰은 반드시 환경 변수로 관리
+- `--scope` 플래그로 전역/프로젝트별 설정 가능
 - Skill에서 MCP 도구를 활용 가능
 
 **다음에는:**

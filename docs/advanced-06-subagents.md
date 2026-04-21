@@ -90,16 +90,15 @@ Agent Teams (독립적인 세션들)
 
 ## 📋 내장 Sub-agents
 
-Claude Code는 여러 내장 Sub-agents를 제공합니다.
+Claude Code는 3가지 핵심 내장 Sub-agents를 제공합니다.
 
-### 주요 Sub-agents
+### 핵심 Sub-agents
 
-| 이름 | 역할 | 사용 시점 |
-|------|------|----------|
-| `Explore` | 코드베이스 탐색 | 파일 찾기, 구조 파악 |
-| `Plan` | 구현 계획 수립 | 복잡한 기능 설계 |
-| `code-reviewer` | 코드 리뷰 | 품질 검증, 버그 찾기 |
-| `code-simplifier` | 코드 단순화 | 리팩토링 |
+| 이름 | 역할 | 사용 시점 | 특징 |
+|------|------|----------|------|
+| `Explore` | 코드베이스 탐색 | 파일 찾기, 구조 분석 | 읽기 전용, 빠른 검색 |
+| `Plan` | 연구 및 계획 | Plan 모드 중 컨텍스트 수집 | 무한 중첩 방지 |
+| `general-purpose` | 복합 작업 처리 | 탐색 + 수정, 다단계 작업 | 복잡한 추론 가능 |
 
 ### 사용 방법
 
@@ -110,11 +109,29 @@ Claude Code는 여러 내장 Sub-agents를 제공합니다.
 
 Claude가 자동으로 적절한 Sub-agent를 선택합니다.
 
+### 기타 도우미 Agents
+
+Claude Code에는 특정 작업을 위한 추가 도우미 에이전트가 있습니다:
+
+| Agent | 모델 | 자동 실행 시점 |
+|-------|------|--------------|
+| `statusline-setup` | Sonnet | `/statusline` 실행 시 |
+| `Claude Code Guide` | Haiku | Claude Code 기능 질문 시 |
+
 ---
 
 ## 💡 Explore Agent
 
 코드베이스를 빠르게 탐색하는 전문 에이전트입니다.
+
+### 특징
+
+- **읽기 전용**: 변경 없이 코드베이스 검색
+- **컨텍스트 격리**: 탐색 결과를 주 대화에서 분리
+- **철저함 수준**: Claude가 상황에 맞게 자동 선택
+  - `quick`: 대상 조회
+  - `medium`: 균형 잡힌 탐색
+  - `very thorough`: 포괄적인 분석
 
 ### 사용 예제
 
@@ -147,7 +164,13 @@ API 엔드포인트가 어떻게 정의되어 있는지 찾아줘
 
 ## 🎨 Plan Agent
 
-복잡한 기능의 구현 계획을 수립하는 에이전트입니다.
+Plan 모드 중에 연구를 담당하는 에이전트입니다.
+
+### 특징
+
+- **Plan 모드 전용**: Plan 모드일 때만 활성화
+- **무한 중첩 방지**: Subagent는 다른 Subagent를 생성할 수 없음
+- **컨텍스트 수집**: 계획 수립에 필요한 정보 수집
 
 ### 사용 예제
 
@@ -194,94 +217,106 @@ API 엔드포인트가 어떻게 정의되어 있는지 찾아줘
 
 ---
 
-## 🔍 Code Reviewer Agent
+## 🎯 general-purpose Agent
 
-코드를 리뷰하고 개선점을 찾는 전문 에이전트입니다.
+복잡한 다단계 작업을 처리하는 범용 에이전트입니다.
+
+### 특징
+
+- **탐색 + 작업**: 읽기와 수정을 모두 수행
+- **복잡한 추론**: 결과 해석과 의사결정 가능
+- **다단계 처리**: 여러 종속 단계가 있는 작업
+
+### Claude가 위임하는 경우
+
+- 탐색과 수정이 모두 필요한 작업
+- 복잡한 추론이 필요한 작업
+- 여러 종속 단계가 있는 작업
 
 ### 사용 예제
 
-**코드 리뷰:**
+**복합 작업:**
 
 ```
-src/auth.ts 파일을 리뷰해줘
+인증 시스템의 버그를 찾아서 수정하고 테스트를 추가해줘
 ```
 
-**Code Reviewer의 출력:**
-
-```markdown
-## 코드 리뷰: src/auth.ts
-
-### ✅ 잘된 점
-- 명확한 함수 이름
-- 적절한 에러 처리
-
-### ⚠️ 개선 필요
-1. **보안**: 비밀번호가 평문으로 로깅됨 (43줄)
-2. **성능**: DB 쿼리가 반복문 안에 있음 (67줄)
-3. **타입**: any 타입 사용 (89줄)
-
-### 💡 제안
-- bcrypt로 비밀번호 해싱
-- 쿼리를 반복문 밖으로 이동
-- 명확한 타입 정의
-```
-
-### 검사 항목
-
-- 보안 취약점
-- 성능 문제
-- 코드 스타일
-- 버그 가능성
-- 테스트 커버리지
+이 작업은 다음을 포함합니다:
+1. 탐색: 인증 관련 파일 찾기
+2. 분석: 버그 원인 파악
+3. 수정: 코드 수정
+4. 검증: 테스트 작성 및 실행
 
 ---
 
-## 🔧 Code Simplifier Agent
+## 📝 사용자 정의 Agent 예제
+
+위의 내장 agent 외에도 사용자 정의 agent를 만들 수 있습니다.
+
+### 예제 1: Code Reviewer Agent
+
+코드를 리뷰하고 개선점을 찾는 전문 에이전트입니다.
+
+```markdown
+---
+name: code-reviewer
+description: 코드 품질 검증 및 개선점 도출
+model: sonnet
+---
+
+# Code Reviewer Agent
+
+당신은 코드 리뷰 전문가입니다.
+
+## 검사 항목
+
+1. **보안 취약점**
+2. **성능 문제**
+3. **코드 스타일**
+4. **버그 가능성**
+5. **테스트 커버리지**
+
+## 출력 형식
+
+### ✅ 잘된 점
+- 목록
+
+### ⚠️ 개선 필요
+1. **카테고리**: 설명 (줄번호)
+
+### 💡 제안
+- 구체적인 개선 방법
+```
+
+### 예제 2: Code Simplifier Agent
 
 복잡한 코드를 단순화하는 에이전트입니다.
 
-### 사용 예제
+```markdown
+---
+name: code-simplifier
+description: 코드 단순화 및 리팩토링
+model: opus
+---
 
-**리팩토링:**
+# Code Simplifier Agent
 
-```
-src/utils.ts 파일을 단순화해줘
-```
+당신은 리팩토링 전문가입니다.
 
-**Before:**
-
-```typescript
-function processData(data: any) {
-  if (data !== null && data !== undefined) {
-    if (Array.isArray(data)) {
-      const result = [];
-      for (let i = 0; i < data.length; i++) {
-        if (data[i] !== null) {
-          result.push(data[i].toUpperCase());
-        }
-      }
-      return result;
-    }
-  }
-  return [];
-}
-```
-
-**After (Code Simplifier):**
-
-```typescript
-function processData(data?: string[]): string[] {
-  return data?.filter(item => item != null)
-             .map(item => item.toUpperCase()) ?? [];
-}
-```
-
-### 개선 사항
+## 목표
 
 - 중복 제거
-- 명확한 타입
-- 현대적인 문법 (옵셔널 체이닝, nullish coalescing)
+- 명확한 타입 정의
+- 현대적인 문법 사용
 - 가독성 향상
+
+## 개선 사항
+
+각 변경에 대해:
+- **Before**: 기존 코드
+- **After**: 개선된 코드
+- **이유**: 왜 더 나은지 설명
+```
 
 ---
 
@@ -380,6 +415,7 @@ cat > ~/.claude/agents/security-checker.md << 'EOF'
 name: security-checker
 description: 보안 취약점을 검사하는 전문 에이전트
 model: sonnet
+priority: 100
 ---
 
 # Security Checker Agent
@@ -413,6 +449,30 @@ model: sonnet
 EOF
 ```
 
+### 우선순위 시스템
+
+Agent 정의에 `priority` 필드를 추가하여 선택 우선순위를 설정할 수 있습니다:
+
+```yaml
+---
+name: my-agent
+description: 설명
+model: sonnet
+priority: 100
+---
+```
+
+**우선순위 값:**
+- 높은 숫자 = 높은 우선순위
+- 기본값: 0
+- 내장 agent보다 우선하려면 100 이상 사용
+
+**동작 방식:**
+1. Claude가 작업에 맞는 agent를 탐색
+2. 우선순위가 높은 사용자 정의 agent부터 평가
+3. 조건이 맞으면 해당 agent 선택
+4. 맞는 agent가 없으면 내장 agent 사용
+
 ### 사용 방법
 
 ```bash
@@ -429,31 +489,31 @@ Claude가 사용자 정의 Agent를 로드해서 실행합니다.
 ### Sub-agents 선택 기준
 
 **Explore Agent:**
-- 파일 찾기
-- 구조 파악
-- 패턴 검색
+- 읽기 전용 탐색
+- 빠른 파일 검색
+- 코드베이스 구조 파악
 
 **Plan Agent:**
-- 복잡한 기능 설계
-- 단계별 계획
-- 아키텍처 결정
+- Plan 모드 중 연구
+- 컨텍스트 수집
+- 무한 중첩 방지
 
-**Code Reviewer:**
-- 품질 검증
-- 버그 찾기
-- 개선점 도출
+**general-purpose Agent:**
+- 탐색 + 수정 작업
+- 복잡한 추론 필요
+- 다단계 종속 작업
 
-**Code Simplifier:**
-- 리팩토링
-- 복잡도 감소
-- 가독성 향상
+**사용자 정의 Agent:**
+- 특정 도메인 전문화
+- 프로젝트 특화 작업
+- 우선순위로 내장 agent 대체
 
 ### Agent 위임 시점
 
 **언제 위임하나:**
 - ✅ 작업이 복잡할 때
 - ✅ 전문성이 필요할 때
-- ✅ 병렬 처리가 가능할 때
+- ✅ 컨텍스트 격리가 필요할 때
 
 **직접 처리:**
 - ✅ 간단한 작업
@@ -467,6 +527,7 @@ Claude가 사용자 정의 Agent를 로드해서 실행합니다.
 name: agent-name
 description: 에이전트 설명
 model: sonnet|opus|haiku
+priority: 100  # 선택적: 높을수록 우선
 ---
 
 # Agent 이름

@@ -47,12 +47,36 @@ Skills를 저장하는 위치에 따라 누가 사용할 수 있는지가 결정
 
 ### 위치별 범위
 
-| 위치 | 경로 | 적용 대상 | 네임스페이스 |
-|------|------|----------|------------|
-| **Enterprise** | 관리 설정 참조 | 조직의 모든 사용자 | `/skill-name` |
-| **Personal** | `~/.claude/skills/<skill-name>/SKILL.md` | 모든 프로젝트 | `/skill-name` |
-| **Project** | `.claude/skills/<skill-name>/SKILL.md` | 이 프로젝트만 | `/skill-name` |
-| **Plugin** | `<plugin>/skills/<skill-name>/SKILL.md` | 플러그인이 활성화된 위치 | `/plugin-name:skill-name` |
+| 위치 | 경로 | 적용 대상 | 우선순위 | 네임스페이스 |
+|------|------|----------|----------|------------|
+| **Enterprise** | 관리 설정 참조 | 조직의 모든 사용자 | 1 (최고) | `/skill-name` |
+| **Personal** | `~/.claude/skills/<skill-name>/SKILL.md` | 모든 프로젝트 | 2 | `/skill-name` |
+| **Project** | `.claude/skills/<skill-name>/SKILL.md` | 이 프로젝트만 | 3 | `/skill-name` |
+| **Plugin (자동)** | `~/.claude/plugins/cache/.../skills/<skill-name>/SKILL.md` | 설치된 플러그인 | 4 | `/plugin-name:skill-name` |
+| **Plugin (세션)** | 아무 곳 + `--plugin-dir` | 명시적 로드 | - | `/plugin-name:skill-name` |
+
+### 플러그인 위치 명확화
+
+**설치된 플러그인 (자동):**
+```
+~/.claude/plugins/cache/<plugin-name>/skills/
+```
+- Claude Code가 자동으로 관리하는 캐시
+- 사용자가 직접 생성하거나 수정하지 않음
+- 플러그인 설치 시 자동으로 이 위치에 캐시됨
+
+**로컬 개발 플러그인 (세션):**
+```bash
+# 개발 중인 플러그인을 임시로 로드
+claude --plugin-dir /path/to/my-plugin-dev
+```
+- 개발 중에만 사용
+- 세션이 끝나면 사라짐
+- 로컬 테스트 용도
+
+**주의:**
+- `~/.claude/plugins/` 디렉토리를 직접 만들거나 수정하지 마세요
+- 플러그인 개발 시에는 `--plugin-dir` 플래그를 사용하세요
 
 ### 우선순위 다이어그램
 
@@ -71,45 +95,83 @@ Skills를 저장하는 위치에 따라 누가 사용할 수 있는지가 결정
 │  Project Skills                     │  우선순위 3
 │  (.claude/skills/)                  │
 └─────────────────────────────────────┘
+              ↓ 덮어씀
+┌─────────────────────────────────────┐
+│  Plugin Skills (자동)                │  우선순위 4
+│  (~/.claude/plugins/cache/...)      │
+└─────────────────────────────────────┘
 
 ┌─────────────────────────────────────┐
-│  Plugin Skills                      │  네임스페이스로
-│  (/plugin-name:skill-name)          │  충돌 없음
+│  Plugin Skills (세션)                │  명시적 로드
+│  (--plugin-dir로 지정)               │  네임스페이스로 충돌 없음
 └─────────────────────────────────────┘
 ```
 
-**예시:**
+### 네임스페이스 규칙
+
+**개인/프로젝트 Skills:**
+```bash
+# 위치
+~/.claude/skills/hello/SKILL.md
+.claude/skills/hello/SKILL.md
+
+# 호출
+/hello
 ```
-같은 "hello" skill이 여러 곳에 있을 때:
 
-~/.claude/skills/hello/SKILL.md           (Personal)
-.claude/skills/hello/SKILL.md             (Project)
+**플러그인 Skills:**
+```bash
+# 위치 (자동 설치)
+~/.claude/plugins/cache/my-plugin/skills/hello/SKILL.md
 
-→ /hello 호출 시: Personal이 우선 (우선순위 2 > 3)
+# 위치 (세션 로드)
+/path/to/my-plugin/skills/hello/SKILL.md
 
-~/.claude/plugins/my-plugin/skills/hello/SKILL.md
-
-→ /my-plugin:hello 호출: 충돌 없음 (네임스페이스)
+# 호출 (둘 다 동일)
+/my-plugin:hello
 ```
+
+**특징:**
+- 개인/프로젝트: 짧은 명령어 `/skill-name`
+- 플러그인: 네임스페이스 `/plugin-name:skill-name`으로 충돌 방지
 
 ### 예제로 이해하기
 
-**시나리오:** `hello` skill이 여러 위치에 있음
+**시나리오 1: 같은 이름의 Skill이 여러 위치에 있을 때**
 
 ```
-~/.claude/skills/hello/SKILL.md        (Personal)
-.claude/skills/hello/SKILL.md          (Project)
-~/.claude/plugins/my-plugin/skills/hello/SKILL.md  (Plugin)
+~/.claude/skills/hello/SKILL.md           (Personal)
+.claude/skills/hello/SKILL.md             (Project)
+~/.claude/plugins/cache/my-plugin/skills/hello/SKILL.md  (Plugin)
 ```
 
-**호출:**
-- `/hello` → Personal 또는 Project (우선순위에 따라)
-- `/my-plugin:hello` → Plugin
+**호출 결과:**
+- `/hello` → Personal Skill 실행 (우선순위 2 > 3)
+- `/my-plugin:hello` → Plugin Skill 실행 (네임스페이스로 구분)
+
+**시나리오 2: 플러그인 개발**
+
+```bash
+# 개발 디렉토리 구조
+/Users/myname/dev/my-plugin/
+├── .claude-plugin/
+│   └── plugin.json
+└── skills/
+    └── test/
+        └── SKILL.md
+
+# 테스트
+cd /any/project
+claude --plugin-dir /Users/myname/dev/my-plugin
+
+# 호출
+/my-plugin:test
+```
 
 **사용 권장:**
-- 개인용 도구: Personal
-- 프로젝트 전용: Project
-- 팀 공유: Plugin
+- **Personal**: 개인 워크플로우, 반복 작업
+- **Project**: 프로젝트별 규칙, 팀 컨벤션
+- **Plugin**: 재사용 가능한 도구, 공개 배포
 
 ---
 

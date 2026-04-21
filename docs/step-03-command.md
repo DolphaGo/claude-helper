@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Step 3: 수동 Skill"
-nav_order: 5
+nav_order: 3
 ---
 
 # Step 3: 수동으로 실행하는 Skill 만들기
@@ -126,12 +126,14 @@ echo "test" > test.txt
 git add test.txt
 ```
 
-### Skill 실행
+### 변경사항 적용 및 실행
 
 ```bash
 /reload-plugins
 /my-first-plugin:commit
 ```
+
+`/reload-plugins` 명령어는 플러그인을 다시 로드합니다.
 
 Claude가:
 1. Staged 파일 확인
