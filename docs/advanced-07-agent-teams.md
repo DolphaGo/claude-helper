@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "고급 7: Agent Teams"
-nav_order: 16
+nav_order: 19
 parent: 고급 개념
 ---
 

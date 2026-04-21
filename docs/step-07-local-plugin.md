@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Step 7: 로컬 플러그인 개발"
-nav_order: 7
+nav_order: 10
 ---
 
 # Step 7: 로컬 플러그인 개발

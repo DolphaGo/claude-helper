@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Step 4: API Skill"
-nav_order: 4
+nav_order: 7
 ---
 
 # Step 4: 환경 변수와 API 호출

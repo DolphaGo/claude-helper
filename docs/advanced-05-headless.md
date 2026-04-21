@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "고급 5: 프로그래밍 방식 실행"
-nav_order: 14
+nav_order: 17
 parent: 고급 개념
 ---
 

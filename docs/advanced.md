@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "고급 개념"
-nav_order: 9
+nav_order: 12
 has_children: true
 ---
 

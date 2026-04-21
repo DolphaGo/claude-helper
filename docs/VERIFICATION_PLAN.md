@@ -1,3 +1,7 @@
+---
+nav_exclude: true
+---
+
 # Claude Code 학습 문서 검증 및 개선 프로젝트 계획
 
 ## 프로젝트 개요

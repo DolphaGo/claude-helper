@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Step 3: 수동 Skill"
-nav_order: 3
+nav_order: 6
 ---
 
 # Step 3: 수동으로 실행하는 Skill 만들기

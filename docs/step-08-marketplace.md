@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Step 8: 마켓플레이스"
-nav_order: 8
+nav_order: 11
 ---
 
 # Step 8: 마켓플레이스 등록과 배포

@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "고급 6: Sub-agents"
-nav_order: 15
+nav_order: 18
 parent: 고급 개념
 ---
 

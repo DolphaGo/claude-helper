@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "고급 8: Troubleshooting"
-nav_order: 17
+nav_order: 20
 parent: 고급 개념
 ---
 

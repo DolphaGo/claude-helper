@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "고급 3: 메시징 채널"
-nav_order: 12
+nav_order: 15
 parent: 고급 개념
 ---
 

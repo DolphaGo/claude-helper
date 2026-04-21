@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "고급 1: MCP 서버"
-nav_order: 10
+nav_order: 13
 parent: 고급 개념
 ---
 

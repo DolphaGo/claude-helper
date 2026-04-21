@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Step 2: Git Skill"
-nav_order: 2
+nav_order: 5
 ---
 
 # Step 2: 실용적인 Git Skill 만들기
