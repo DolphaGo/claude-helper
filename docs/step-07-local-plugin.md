@@ -649,4 +649,4 @@ claude --plugin-dir ~/dev/my-plugin
 
 ---
 
-**다음**: [Step 5: 고급 플러그인 패턴](./step-05-advanced-plugin.html) →
+**다음**: [Step 8: 마켓플레이스](step-08-marketplace) →
