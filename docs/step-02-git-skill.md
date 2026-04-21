@@ -37,7 +37,7 @@ nav_order: 4
 
 ### 실행하기
 
-```bash
+````bash
 cat > ~/.claude/plugins/my-first-plugin/skills/gs.md << 'EOF'
 ---
 name: gs
@@ -59,7 +59,7 @@ git branch --show-current
 git status --short
 ```
 EOF
-```
+````
 
 ### 새로운 점
 
@@ -109,7 +109,7 @@ main
 
 ### 개선된 버전
 
-```bash
+````bash
 cat > ~/.claude/plugins/my-first-plugin/skills/gs.md << 'EOF'
 ---
 name: gs
@@ -161,7 +161,7 @@ git diff --name-only
 💡 다음 행동: [추천]
 ```
 EOF
-```
+````
 
 ### 무엇이 바뀌었나?
 
@@ -228,7 +228,7 @@ fatal: not a git repository
 
 ### 개선된 버전
 
-```bash
+````bash
 cat > ~/.claude/plugins/my-first-plugin/skills/gs.md << 'EOF'
 ---
 name: gs
@@ -293,7 +293,7 @@ git ls-files --others --exclude-standard | wc -l
   [커밋 필요/깔끔함/충돌 있음 등]
 ```
 EOF
-```
+````
 
 ### 새로운 점
 
@@ -355,7 +355,7 @@ git ls-files --others --exclude-standard
 
 ### 최적화 버전
 
-```bash
+````bash
 cat > ~/.claude/plugins/my-first-plugin/skills/gs.md << 'EOF'
 ---
 name: gs
@@ -414,7 +414,7 @@ echo "$status"
 [모두 0 → 깔끔한 상태]
 ```
 EOF
-```
+````
 
 ### 최적화 포인트
 
@@ -464,7 +464,7 @@ behind=$(git rev-list HEAD..@{u} 2>/dev/null | wc -l | tr -d ' ')
 
 ### 최종 버전
 
-```bash
+````bash
 cat > ~/.claude/plugins/my-first-plugin/skills/gs.md << 'EOF'
 ---
 name: gs
@@ -531,7 +531,7 @@ echo "$status"
 [상태에 따른 추천]
 ```
 EOF
-```
+````
 
 ---
 

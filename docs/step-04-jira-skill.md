@@ -68,7 +68,7 @@ echo $JIRA_EMAIL
 
 ### 파일 생성
 
-```bash
+````bash
 cat > ~/.claude/plugins/my-first-plugin/skills/jira-bug.md << 'EOF'
 ---
 name: jira-bug
@@ -174,7 +174,7 @@ curl -X POST "$JIRA_URL/rest/api/3/issue" \
 원인: [에러 메시지]
 ```
 EOF
-```
+````
 
 ---
 
@@ -182,7 +182,7 @@ EOF
 
 사용자와 대화하며 정보를 수집하는 버전:
 
-```bash
+````bash
 cat > ~/.claude/plugins/my-first-plugin/skills/jira-bug.md << 'EOF'
 ---
 name: jira-bug
@@ -261,7 +261,7 @@ echo "✅ Jira: $JIRA_URL"
 → 완료
 ```
 EOF
-```
+````
 
 ---
 
@@ -269,7 +269,7 @@ EOF
 
 자주 쓰는 버그 타입을 템플릿으로:
 
-```bash
+````bash
 cat > ~/.claude/plugins/my-first-plugin/skills/jira-bug.md << 'EOF'
 ---
 name: jira-bug
@@ -389,7 +389,7 @@ description: Jira 버그 티켓 (템플릿 지원)
 
 선택한 템플릿에 내용을 채워서 Jira API로 전송합니다.
 EOF
-```
+````
 
 ---
 

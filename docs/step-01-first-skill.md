@@ -74,7 +74,7 @@ drwxr-xr-x  skills
 
 이 명령어를 **그대로** 복사해서 실행하세요:
 
-```bash
+````bash
 cat > ~/.claude/plugins/my-first-plugin/skills/hello.md << 'EOF'
 ---
 name: hello
@@ -90,7 +90,7 @@ description: 가장 간단한 인사 skill
 pwd
 ```
 EOF
-```
+````
 
 ### 무슨 일이 일어났나?
 
@@ -293,7 +293,7 @@ claude code
 
 파일을 수정해봅시다:
 
-```bash
+````bash
 cat > ~/.claude/plugins/my-first-plugin/skills/hello.md << 'EOF'
 ---
 name: hello
@@ -316,7 +316,7 @@ pwd
 git branch --show-current 2>/dev/null || echo "Git 저장소 아님"
 ```
 EOF
-```
+````
 
 ### 재시작 & 확인
 
@@ -466,7 +466,7 @@ date "+%Y-%m-%d %H:%M:%S"
 <details>
 <summary>정답 보기</summary>
 
-```bash
+````bash
 cat > ~/.claude/plugins/my-first-plugin/skills/bye.md << 'EOF'
 ---
 name: bye
@@ -480,7 +480,7 @@ description: 작별 인사
 date "+%Y-%m-%d %H:%M:%S"
 ```
 EOF
-```
+````
 
 **재시작 후 실행:**
 ```

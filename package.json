@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Your Name/claude-helper.git"
+    "url": "git+https://github.com/DolphaGo/claude-helper.git"
   },
   "keywords": [
     "claude",
@@ -19,6 +19,6 @@
     "commands",
     "plugin"
   ],
-  "author": "Your Name",
+  "author": "DolphaGo",
   "license": "MIT"
 }

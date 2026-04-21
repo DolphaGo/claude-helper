@@ -20,7 +20,7 @@ Claude Code를 위한 커스텀 skills & commands 모음입니다.
 cd ~/.claude/plugins
 
 # 2. 클론 또는 복사
-git clone https://github.com/your-username/claude-helper.git
+git clone https://github.com/DolphaGo/claude-helper.git
 # 또는
 cp -r /path/to/claude-helper .
 
@@ -299,7 +299,7 @@ MIT License
 
 ## 👤 작성자
 
-**Your Name**
+**DolphaGo**
 
 ## 🙏 감사
 

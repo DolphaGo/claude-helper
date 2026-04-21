@@ -35,7 +35,7 @@ nav_order: 7
 
 ## 📝 기본 검색 Skill
 
-```bash
+````bash
 cat > ~/.claude/plugins/my-first-plugin/skills/search.md << 'EOF'
 ---
 name: search
@@ -87,7 +87,7 @@ fi
 💡 총 2개 파일에서 5건 발견
 ```
 EOF
-```
+````
 
 ---
 
@@ -103,7 +103,7 @@ grep "한글" file.js
 
 ### 해결: 인코딩 처리
 
-```bash
+````bash
 cat > ~/.claude/plugins/my-first-plugin/skills/search.md << 'EOF'
 ---
 name: search
@@ -168,7 +168,7 @@ rg '"[^"]*[가-힣]+[^"]*"' --type js
 💡 2개 파일에서 2건 발견
 ```
 EOF
-```
+````
 
 ---
 
@@ -176,7 +176,7 @@ EOF
 
 ### 파일 타입별 검색
 
-```bash
+````bash
 cat > ~/.claude/plugins/my-first-plugin/skills/search.md << 'EOF'
 ---
 name: search
@@ -279,7 +279,7 @@ rg "$query" -A 2
   - 소요 시간: Zms
 ```
 EOF
-```
+````
 
 ---
 
@@ -287,7 +287,7 @@ EOF
 
 ### TODO 찾기
 
-```bash
+````bash
 cat > ~/.claude/plugins/my-first-plugin/skills/find-todos.md << 'EOF'
 ---
 name: find-todos
@@ -353,7 +353,7 @@ rg "TODO|FIXME" --count --sort path
   - 총 16건
 ```
 EOF
-```
+````
 
 ### 함수/클래스 찾기
 
@@ -494,7 +494,7 @@ secret
 <details>
 <summary>정답 보기</summary>
 
-```bash
+````bash
 cat > ~/.claude/plugins/my-first-plugin/skills/find-secrets.md << 'EOF'
 ---
 name: find-secrets
@@ -529,7 +529,7 @@ rg "API_KEY|SECRET|PASSWORD|TOKEN" \
   - Secrets Manager 사용
 ```
 EOF
-```
+````
 
 </details>
 

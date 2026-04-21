@@ -135,7 +135,7 @@ EOF
 
 **목적:** `git push origin main`을 `/qp`로 축약
 
-```bash
+````bash
 cat > ~/.claude/plugins/my-first-plugin/commands/qp.md << 'EOF'
 ---
 name: qp
@@ -166,7 +166,7 @@ git push origin "$branch"
 
 실패하면 에러 메시지 표시
 EOF
-```
+````
 
 ### 테스트
 
@@ -186,7 +186,7 @@ EOF
 
 ### 1. 빠른 커밋 (qc)
 
-```bash
+````bash
 cat > ~/.claude/plugins/my-first-plugin/commands/qc.md << 'EOF'
 ---
 name: qc
@@ -229,11 +229,11 @@ git commit -m "[생성된 메시지]"
    메시지: [커밋 메시지]
 ```
 EOF
-```
+````
 
 ### 2. 브랜치 목록 (br)
 
-```bash
+````bash
 cat > ~/.claude/plugins/my-first-plugin/commands/br.md << 'EOF'
 ---
 name: br
@@ -269,11 +269,11 @@ git for-each-ref --sort=-committerdate refs/heads/ \
    2 weeks ago - fix: 버그 수정
 ```
 EOF
-```
+````
 
 ### 3. 파일 검색 (ff)
 
-```bash
+````bash
 cat > ~/.claude/plugins/my-first-plugin/commands/ff.md << 'EOF'
 ---
 name: ff
@@ -319,7 +319,7 @@ find . -name "*[검색어]*" -type f \
 - 최대 20개까지 표시
 - 더 보려면 검색어를 구체적으로
 EOF
-```
+````
 
 ---
 
@@ -390,7 +390,7 @@ done
 <details>
 <summary>정답 보기</summary>
 
-```bash
+````bash
 cat > ~/.claude/plugins/my-first-plugin/commands/up.md << 'EOF'
 ---
 name: up
@@ -425,7 +425,7 @@ Behind: X개 커밋
 ✅ 최신 상태입니다
 ```
 EOF
-```
+````
 
 </details>
 
