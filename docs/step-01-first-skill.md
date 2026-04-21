@@ -49,6 +49,9 @@ mkdir -p ~/.claude/plugins/my-first-plugin/.claude-plugin
 
 Claude Code는 `~/.claude/plugins/` 디렉토리를 스캔해서 플러그인을 찾습니다.
 
+{: .note }
+> **개념 이해:** Skills가 있는 위치에 따라 범위가 달라집니다. 자세한 내용은 [핵심 개념 - Skills가 있는 위치](concepts#skills가-있는-위치)를 참고하세요.
+
 ---
 
 ## 📋 2단계: plugin.json 만들기
@@ -60,10 +63,7 @@ cat > ~/.claude/plugins/my-first-plugin/.claude-plugin/plugin.json << 'EOF'
 {
   "name": "my-first-plugin",
   "version": "1.0.0",
-  "description": "내 첫 번째 플러그인",
-  "author": {
-    "name": "Your Name"
-  }
+  "description": "내 첫 번째 플러그인"
 }
 EOF
 ```
@@ -80,7 +80,11 @@ EOF
 - `name`: 플러그인 이름 (필수)
 - `version`: 버전 (필수)
 - `description`: 설명 (필수)
-- `author`: 작성자 (선택)
+
+**선택 필드:**
+- `author`: 작성자 정보
+- `repository`: Git 저장소 URL
+- `license`: 라이선스
 
 ---
 
@@ -122,9 +126,12 @@ SKILLEOF
 ```
 
 **핵심 포인트:**
-1. 디렉토리 이름 = Skill 이름
+1. 디렉토리 이름 = Skill 이름 (`name` 필드를 생략할 경우)
 2. 파일명은 반드시 대문자 `SKILL.md`
-3. Frontmatter의 `description`은 Claude가 skill을 언제 사용할지 판단
+3. Frontmatter는 모두 선택사항이지만 `description` 권장
+
+{: .note }
+> **Frontmatter 이해:** 공식 문서에 따르면 모든 frontmatter 필드가 선택사항입니다. `name`을 생략하면 디렉토리 이름을 사용합니다. 자세한 내용은 [핵심 개념 - Frontmatter 필드](concepts#frontmatter-필드)를 참고하세요.
 
 ---
 

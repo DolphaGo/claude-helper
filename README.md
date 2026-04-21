@@ -19,36 +19,88 @@ bundle exec jekyll serve
 
 ## 🎯 무엇을 배우나요?
 
+### 핵심 개념
+먼저 Skills와 Plugins 시스템의 전체 그림을 이해하세요:
+- Skills vs Plugins
+- Skills가 있는 위치와 범위
+- Frontmatter 필드 이해
+- 네임스페이스와 우선순위
+- Plugin 배포 방법
+
+### 기초 실습
 각 단계는 **하나의 핵심 개념**에 집중합니다.
 
-### Step 1: 첫 번째 Skill (10분)
+**Step 1: 첫 번째 Skill (10분)**
 - Skill 파일 구조 (`skills/<name>/SKILL.md`)
 - plugin.json 작성
 - 네임스페이스 이해
 
-### Step 2: 명령어 실행 (10분)
+**Step 2: 명령어 실행 (10분)**
 - Claude에게 명령어 실행 지침 작성
 - 출력 형식 지정
 - 에러 처리 (사전 확인)
 
-### Step 3: 수동 Skill (10분)
+**Step 3: 수동 Skill (10분)**
 - `disable-model-invocation` 사용
 - 사용자만 실행 가능한 skill
 - 위험한 작업 제어
 
-### Step 4: 환경 변수 (15분)
+**Step 4: 환경 변수 (15분)**
 - 환경 변수가 필요한 이유
 - 환경 변수 설정 방법
 - API 호출 기본
 
-### Step 5: 도구 활용 (10분)
+**Step 5: 도구 활용 (10분)**
 - Claude Code의 내장 도구
 - Grep 도구 사용
 - 도구 사용 지침 작성
 
-### Step 6: 배포 (10분)
+**Step 6: 배포 (10분)**
 - Git 저장소 공유
 - 팀원 설치 가이드
+
+### 고급 개념
+복잡한 통합과 자동화를 위한 고급 기능들:
+
+**고급 1: MCP 서버 (20분)**
+- Model Context Protocol 이해
+- 외부 시스템 연결
+- 데이터베이스, API 통합
+
+**고급 2: Hooks (15분)**
+- 이벤트 기반 자동화
+- 워크플로우 자동화
+- Pre/Post 도구 실행
+
+**고급 3: Channels (15분)**
+- 외부 이벤트 수신
+- Webhook 통합
+- 실시간 알림
+
+**고급 4: Scheduled Tasks (15분)**
+- 정기 작업 예약
+- Cron 표현식
+- 자동 리포트 생성
+
+**고급 5: Headless 모드 (20분)**
+- 프로그래밍 방식 실행
+- CI/CD 통합
+- 배치 처리
+
+**고급 6: Sub-agents (20분)**
+- 작업 위임
+- 전문화된 에이전트
+- 병렬 처리
+
+**고급 7: Agent Teams (20분)**
+- 여러 세션 조율
+- 대규모 작업 분산
+- 협업 패턴
+
+**고급 8: Troubleshooting (15분)**
+- 일반적인 문제 해결
+- 디버깅 도구
+- 성능 최적화
 
 ## 📦 설치
 
